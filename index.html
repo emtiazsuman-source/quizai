@@ -69,12 +69,14 @@
         .dark #country-modal-list .country-item:hover { background-color: #374151; }
         .dark #error-box { background-color: #4b1d1d; border-color: #992c2c; color: #fca5a5; }
         .dark #quiz-topic { background-color: transparent !important; color: #a5b4fc !important; }
-        .dark .custom-radio:checked { border-color: #1f2937; }
         .dark .border, .dark .border-b, .dark .border-t { border-color: #4b5563; }
         .dark .hover\:bg-indigo-50:hover { background-color: rgba(99, 102, 241, 0.1); }
         .dark .bg-green-100 { background-color: #064e3b; border-color: #10b981 !important; }
         .dark .bg-red-100 { background-color: #7f1d1d; border-color: #ef4444 !important; }
         .dark .text-gray-600 { color: #9ca3af; }
+        .dark #performance-summary-view .bg-gray-50 { background-color: #374151; }
+        .dark #performance-summary-view .text-gray-500 { color: #9ca3af; }
+
 
         /* Toggle switch styling */
         .toggle-on { background-color: #4f46e5; }
@@ -200,22 +202,18 @@
 
         <!-- View 2: Active Quiz -->
         <div id="quiz-view" class="hidden">
-            <!-- MODIFIED: New Header Design -->
             <div class="relative flex items-center justify-between mb-6 border-b pb-4">
-                <!-- Home Button with Icon -->
                 <button id="home-btn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
                 </button>
 
-                <!-- Topic in the middle -->
                 <div class="absolute left-1/2 -translate-x-1/2 text-center">
                     <h2 class="text-lg sm:text-xl font-bold text-indigo-600 dark:text-indigo-400" id="quiz-topic-title"></h2>
                     <p class="text-sm text-gray-500 dark:text-gray-400" id="quiz-topic-details"></p>
                 </div>
 
-                <!-- Score on the right -->
                 <div class="flex items-center space-x-2 bg-gray-100 dark:bg-gray-700 rounded-full px-4 py-1.5">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
@@ -243,18 +241,37 @@
             </div>
         </div>
         
-        <!-- View 3: Performance Summary (after Challenge Mode) -->
-        <div id="performance-summary-view" class="hidden text-center">
-            <h2 id="summary-title" class="text-3xl font-bold mb-4"></h2>
-            <div class="space-y-3 text-lg">
-                <p><span id="summary-total-label"></span>: <span id="total-questions"></span></p>
-                <p><span id="summary-correct-label"></span>: <span id="correct-answers"></span></p>
-                <p><span id="summary-incorrect-label"></span>: <span id="incorrect-answers"></span></p>
-                <p><span id="summary-percentage-label"></span>: <span id="percentage" class="font-bold"></span></p>
-                <p><span id="summary-rating-label"></span>: <span id="rating" class="font-bold text-2xl"></span></p>
+        <div id="performance-summary-view" class="hidden text-center p-4">
+            <div class="mx-auto mb-4 w-16 h-16 bg-yellow-100 dark:bg-yellow-900/50 rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-yellow-500 dark:text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
             </div>
+            <h2 id="summary-title" class="text-3xl font-bold mb-2"></h2>
+            <p id="rating" class="text-xl font-semibold text-yellow-500 mb-6"></p>
+
+            <div class="grid grid-cols-2 gap-4 text-center bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg border dark:border-gray-700">
+                <div class="p-2">
+                    <p class="text-sm text-gray-500 dark:text-gray-400" id="summary-total-label"></p>
+                    <p class="text-2xl font-bold" id="total-questions"></p>
+                </div>
+                <div class="p-2">
+                    <p class="text-sm text-gray-500 dark:text-gray-400" id="summary-percentage-label"></p>
+                    <p class="text-2xl font-bold" id="percentage"></p>
+                </div>
+                <div class="p-2">
+                    <p class="text-sm text-gray-500 dark:text-gray-400" id="summary-correct-label"></p>
+                    <p class="text-2xl font-bold text-green-500" id="correct-answers"></p>
+                </div>
+                <div class="p-2">
+                    <p class="text-sm text-gray-500 dark:text-gray-400" id="summary-incorrect-label"></p>
+                    <p class="text-2xl font-bold text-red-500" id="incorrect-answers"></p>
+                </div>
+            </div>
+            
             <button id="play-again-btn" class="mt-8 w-full bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"></button>
         </div>
+
 
         <!-- Error Message Box -->
         <div id="error-box" class="hidden mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg" role="alert">
@@ -296,7 +313,6 @@
         const startQuizBtn = document.getElementById('start-quiz-btn');
         const challengeModeBtn = document.getElementById('challenge-mode-btn');
         const challengeCountSelect = document.getElementById('challenge-count-select');
-        // MODIFIED: New elements for the redesigned header
         const quizTopicTitle = document.getElementById('quiz-topic-title');
         const quizTopicDetails = document.getElementById('quiz-topic-details');
         const scoreEl = document.getElementById('score');
@@ -361,7 +377,7 @@
                 title: 'Quiz AI', subtitle: 'Start a quiz by choosing any topic and difficulty!', langLabel: 'Language', countryLabel: 'Country', changeBtn: 'Change', modalTitle: 'Select a Country', searchPlaceholder: 'Search for a country...', nightModeLabel: 'Night Mode', soundLabel: 'Sound', readAloudLabel: 'Read Question', readOptionsLabel: 'Read Options', feedbackLabel: 'Answer Feedback', correctResponse: 'Correct!', incorrectResponse: 'Incorrect. The correct answer is', challengeCountLabel: 'Number of Questions', topicLabel: 'Enter a topic (leave blank for random)', topicPlaceholder: 'e.g., History, Science...', levelLabel: 'Select difficulty', levels: { easy: 'Easy', medium: 'Intermediate', hard: 'Hard', bcs: 'Job Prep', custom: 'Custom' }, customLevelLabel: 'Enter custom level', customLevelPlaceholder: 'e.g., Medical Entrance...', startQuiz: 'Start Quiz', challengeMode: 'Challenge Mode', home: 'Home', score: 'Score', nextQuestion: 'Next Question', errorTitle: 'Error!', errorTopic: 'Please enter a topic.', errorCustomLevel: 'Please enter a custom level.', errorFetch: 'Failed to fetch question.', errorUnexpected: 'Received an unexpected response from the AI.', errorFormat: 'The AI sent data in a wrong format.', errorInvalidData: 'The data from the AI is not in the correct format.', errorServer: 'Could not get a response from the server.', summaryTitle: 'Challenge Complete!', summaryTotal: 'Total Questions', summaryCorrect: 'Correct Answers', summaryIncorrect: 'Incorrect Answers', summaryPercentage: 'Percentage', summaryRating: 'Rating', ratings: { good: 'Good', better: 'Better', best: 'Best' }, playAgain: 'Play Again', randomTopicDefault: 'General Knowledge'
             },
             'Hindi': {
-                title: 'क्विज़ AI', subtitle: 'अपनी पसंद का कोई भी विषय और स्तर चुनकर प्रश्नोत्तरी शुरू करें!', langLabel: 'भाषा', countryLabel: 'देश', changeBtn: 'बदलें', modalTitle: 'एक देश चुनें', searchPlaceholder: 'देश खोजें...', nightModeLabel: 'नाइट মোড', soundLabel: 'ध्वनि', readAloudLabel: 'प्रश्न पढ़ें', readOptionsLabel: 'विकल्प पढ़ें', feedbackLabel: 'उत्तर प्रतिक्रिया', correctResponse: 'सही!', incorrectResponse: 'गलत। सही উত্তর है', challengeCountLabel: 'प्रश्नों की संख्या', topicLabel: 'एक विषय दर्ज करें (यादृच्छिक के लिए खाली छोड़ दें)', topicPlaceholder: 'जैसे: भारत, क्रिकेट...', levelLabel: 'कठिनाई स्तर चुनें', levels: { easy: 'सरल', medium: 'मध्यम', hard: 'कठिन', bcs: 'परीक्षा तैयारी', custom: 'अन्य' }, customLevelLabel: 'अपना पसंदीदा स्तर दर्ज करें', customLevelPlaceholder: 'जैसे: बैंक नौकरी...', startQuiz: 'प्रश्नोत्तरी शुरू करें', challengeMode: 'चैलेंज মোড', home: 'होम', score: 'स्कोर', nextQuestion: 'अगला प्रश्न', errorTitle: 'त्रुटि!', errorTopic: 'कृपया एक विषय दर्ज करें।', errorCustomLevel: 'कृपया अपना पसंदीदा स्तर दर्ज करें।', errorFetch: 'प्रश्न प्राप्त करने में विफल।', errorUnexpected: 'AI से एक अप्रत्याक्षित प्रतिक्रिया मिली।', errorFormat: 'AI ने गलत प्रारूप में डेटा भेजा।', errorInvalidData: 'AI से मिला डेटा सही प्रारूप में नहीं है।', errorServer: 'सर्वर से कोई प्रतिक्रिया नहीं मिल सकी।', summaryTitle: 'चुनौती पूरी हुई!', summaryTotal: 'कुल प्रश्न', summaryCorrect: 'सही उत्तर', summaryIncorrect: 'गलत उत्तर', summaryPercentage: 'प्रतिशत', summaryRating: 'रेटिंग', ratings: { good: 'अच्छा', better: 'बेहतर', best: 'सर्वश्रेष्ठ' }, playAgain: 'फिर से खेलें', randomTopicDefault: 'सामान्य ज्ञान'
+                title: 'क्विज़ AI', subtitle: 'अपनी पसंद का कोई भी विषय और स्तर चुनकर प्रश्नोत्तरी शुरू करें!', langLabel: 'भाषा', countryLabel: 'देश', changeBtn: 'बदलें', modalTitle: 'एक देश चुनें', searchPlaceholder: 'देश खोजें...', nightModeLabel: 'नाइट মোড', soundLabel: 'ध्वनि', readAloudLabel: 'प्रश्न पढ़ें', readOptionsLabel: 'विकल्प पढ़ें', feedbackLabel: 'उत्तर प्रतिक्रिया', correctResponse: 'सही!', incorrectResponse: 'गलत। सही উত্তর है', challengeCountLabel: 'प्रश्नों की संख्या', topicLabel: 'एक विषय दर्ज करें (यादृच्छिक के लिए खाली छोड़ दें)', topicPlaceholder: 'जैसे: भारत, क्रिकेट...', levelLabel: 'कठिनाई स्तर चुनें', levels: { easy: 'सरल', medium: 'मध्यम', hard: 'কঠিন', bcs: 'परीक्षा तैयारी', custom: 'अन्य' }, customLevelLabel: 'अपना पसंदीदा स्तर दर्ज करें', customLevelPlaceholder: 'जैसे: बैंक नौकरी...', startQuiz: 'प्रश्नोत्तरी शुरू करें', challengeMode: 'चैलेंज মোড', home: 'होम', score: 'स्कोर', nextQuestion: 'अगला प्रश्न', errorTitle: 'त्रुटि!', errorTopic: 'कृपया एक विषय दर्ज करें।', errorCustomLevel: 'कृपया अपना पसंदीदा स्तर दर्ज करें।', errorFetch: 'प्रश्न प्राप्त करने में विफल।', errorUnexpected: 'AI से एक अप्रत्याक्षित प्रतिक्रिया मिली।', errorFormat: 'AI ने गलत प्रारूप में डेटा भेजा।', errorInvalidData: 'AI से मिला डेटा सही प्रारूप में नहीं है।', errorServer: 'सर्वर से कोई प्रतिक्रिया नहीं मिल सकी।', summaryTitle: 'चुनौती पूरी हुई!', summaryTotal: 'कुल प्रश्न', summaryCorrect: 'सही उत्तर', summaryIncorrect: 'गलत उत्तर', summaryPercentage: 'प्रतिशत', summaryRating: 'रेटिंग', ratings: { good: 'अच्छा', better: 'बेहतर', best: 'सर्वश्रेष्ठ' }, playAgain: 'फिर से खेलें', randomTopicDefault: 'सामान्य ज्ञान'
             },
             'Spanish': {
                 title: 'Quiz AI', subtitle: '¡Inicia un cuestionario eligiendo cualquier tema y dificultad!', langLabel: 'Idioma', countryLabel: 'País', changeBtn: 'Cambiar', modalTitle: 'Selecciona un país', searchPlaceholder: 'Buscar un país...', nightModeLabel: 'Modo Noche', soundLabel: 'Sonido', readAloudLabel: 'Leer Pregunta', readOptionsLabel: 'Leer Opciones', feedbackLabel: 'Respuesta de audio', correctResponse: '¡Correcto!', incorrectResponse: 'Incorrecto. La respuesta correcta es', challengeCountLabel: 'Número de preguntas', topicLabel: 'Introduce un tema (deja en blanco para aleatorio)', topicPlaceholder: 'Ej: Historia, Ciencia...', levelLabel: 'Selecciona el nivel', levels: { easy: 'Fácil', medium: 'Intermedio', hard: 'Difícil', bcs: 'Preparación Examen', custom: 'Personalizado' }, customLevelLabel: 'Introduce un nivel personalizado', customLevelPlaceholder: 'Ej: Examen Médico...', startQuiz: 'Iniciar Cuestionario', challengeMode: 'Modo Desafío', home: 'Inicio', score: 'Puntuación', nextQuestion: 'Siguiente Pregunta', errorTitle: '¡Error!', errorTopic: 'Por favor, introduce un tema.', errorCustomLevel: 'Por favor, introduce un nivel personalizado.', errorFetch: 'Error al obtener la pregunta.', errorUnexpected: 'Se recibió una respuesta inesperada de la IA.', errorFormat: 'La IA envió datos en un formato incorrecto.', errorInvalidData: 'Los datos de la IA no están en el formato correcto.', errorServer: 'No se pudo obtener una respuesta del servidor.', summaryTitle: '¡Desafío Completo!', summaryTotal: 'Total de Preguntas', summaryCorrect: 'Respuestas Correctas', summaryIncorrect: 'Respuestas Incorrectas', summaryPercentage: 'Porcentaje', summaryRating: 'Calificación', ratings: { good: 'Bueno', better: 'Mejor', best: 'Excelente' }, playAgain: 'Jugar de Nuevo', randomTopicDefault: 'Conocimiento General'
@@ -389,8 +405,6 @@
             startQuizBtn.textContent = t.startQuiz;
             challengeModeBtn.textContent = t.challengeMode;
             document.getElementById('challenge-count-label').textContent = t.challengeCountLabel;
-            // The home button is now an icon, but we can set its text for accessibility if needed
-            // homeBtn.textContent = t.home; 
             document.getElementById('score-label').textContent = t.score;
             nextQuestionBtn.textContent = t.nextQuestion;
             document.getElementById('error-title').textContent = t.errorTitle;
@@ -407,7 +421,7 @@
             document.getElementById('summary-correct-label').textContent = t.summaryCorrect;
             document.getElementById('summary-incorrect-label').textContent = t.summaryIncorrect;
             document.getElementById('summary-percentage-label').textContent = t.summaryPercentage;
-            document.getElementById('summary-rating-label').textContent = t.summaryRating;
+            // document.getElementById('summary-rating-label').textContent = t.summaryRating; // FIX: This element was removed in the new design
             playAgainBtn.textContent = t.playAgain;
 
             levelSelect.innerHTML = `
@@ -936,24 +950,23 @@
 
             const t = translations[currentLanguage] || translations['English'];
             const percentage = Math.round((score / totalChallengeQuestions) * 100);
-            let rating = '';
+            let ratingText = '';
             
-            if (percentage >= 80) rating = t.ratings.best;
-            else if (percentage >= 50) rating = t.ratings.better;
-            else rating = t.ratings.good;
+            if (percentage >= 80) ratingText = t.ratings.best;
+            else if (percentage >= 50) ratingText = t.ratings.better;
+            else ratingText = t.ratings.good;
 
             document.getElementById('total-questions').textContent = totalChallengeQuestions;
             document.getElementById('correct-answers').textContent = score;
             document.getElementById('incorrect-answers').textContent = totalChallengeQuestions - score;
             document.getElementById('percentage').textContent = `${percentage}%`;
-            document.getElementById('rating').textContent = rating;
+            document.getElementById('rating').textContent = ratingText;
         }
 
         function updateScore() {
             const total = isChallengeMode ? totalChallengeQuestions : askedQuestions.length;
             const currentCount = isChallengeMode ? challengeQuestionCount : askedQuestions.length;
             
-            // --- MODIFIED: Update the new header elements ---
             quizTopicTitle.textContent = currentTopic;
             quizTopicDetails.textContent = isChallengeMode ? `${currentLevel} (${currentCount}/${total})` : currentLevel;
             
