@@ -106,7 +106,7 @@
         <div class="absolute top-4 right-4">
             <button id="menu-btn" class="p-2 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
             <!-- Dropdown Menu Panel for Settings -->
@@ -167,6 +167,17 @@
         <div id="topic-selection-view">
             <h1 id="main-title" class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-2 mt-8"></h1>
             <p id="subtitle" class="text-center text-gray-500 mb-8"></p>
+            
+            <!-- MODIFIED: Moved Mode Switch to the top -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2 text-center" id="mode-label"></label>
+                <div class="relative flex w-full max-w-xs mx-auto p-1 bg-gray-200 dark:bg-gray-700 rounded-lg">
+                    <div id="switch-bg" class="absolute top-1 left-1 h-[calc(100%-8px)] w-1/2 bg-white dark:bg-gray-800 rounded-md shadow-md transition-transform duration-300 ease-in-out"></div>
+                    <button id="normal-mode-btn" class="relative w-1/2 py-2 text-sm font-semibold z-10 transition-colors"></button>
+                    <button id="challenge-mode-btn" class="relative w-1/2 py-2 text-sm font-semibold z-10 transition-colors"></button>
+                </div>
+            </div>
+
             <div class="space-y-4">
                 <div>
                     <label for="topic-input" class="block text-sm font-medium text-gray-700 mb-1" id="topic-label"></label>
@@ -182,23 +193,20 @@
                     <label for="custom-level-input" class="block text-sm font-medium text-gray-700 mb-1" id="custom-level-label"></label>
                     <input type="text" id="custom-level-input" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
                 </div>
-                <button id="start-quiz-btn" class="w-full bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105">
-                </button>
-                <div class="border-t pt-4 space-y-3">
-                     <div>
-                        <label for="challenge-count-select" class="block text-sm font-medium text-gray-700 mb-1" id="challenge-count-label"></label>
-                        <!-- MODIFIED: Added option for 5 questions and set 10 as default -->
-                        <select id="challenge-count-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition bg-white">
-                            <option value="5">5</option>
-                            <option value="10" selected>10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                            <option value="50">50</option>
-                        </select>
-                    </div>
-                    <button id="challenge-mode-btn" class="w-full bg-purple-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-transform transform hover:scale-105">
-                    </button>
+
+                <div id="challenge-options" class="hidden pt-2 space-y-2">
+                    <label for="challenge-count-select" class="block text-sm font-medium text-gray-700" id="challenge-count-label"></label>
+                    <select id="challenge-count-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition bg-white">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="50">50</option>
+                    </select>
                 </div>
+
+                <button id="start-quiz-btn" class="w-full bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105 !mt-6">
+                </button>
             </div>
         </div>
 
@@ -313,8 +321,6 @@
         const customLevelContainer = document.getElementById('custom-level-container');
         const customLevelInput = document.getElementById('custom-level-input');
         const startQuizBtn = document.getElementById('start-quiz-btn');
-        const challengeModeBtn = document.getElementById('challenge-mode-btn');
-        const challengeCountSelect = document.getElementById('challenge-count-select');
         const quizTopicTitle = document.getElementById('quiz-topic-title');
         const quizTopicDetails = document.getElementById('quiz-topic-details');
         const scoreEl = document.getElementById('score');
@@ -342,6 +348,11 @@
         const closeModalBtn = document.getElementById('close-modal-btn');
         const countrySearchInput = document.getElementById('country-search-input');
         const countryModalList = document.getElementById('country-modal-list');
+        const normalModeBtn = document.getElementById('normal-mode-btn');
+        const challengeModeBtn = document.getElementById('challenge-mode-btn');
+        const switchBg = document.getElementById('switch-bg');
+        const challengeOptions = document.getElementById('challenge-options');
+        const challengeCountSelect = document.getElementById('challenge-count-select');
 
         // --- Application State ---
         let currentTopic = '';
@@ -360,7 +371,6 @@
         // --- Challenge Mode State ---
         let isChallengeMode = false;
         let challengeQuestionCount = 0;
-        // MODIFIED: Set default to 10
         let totalChallengeQuestions = 10;
         const TIME_PER_QUESTION = 20; // seconds
         let timerInterval;
@@ -374,16 +384,16 @@
         // --- UI Translations ---
         const translations = {
             'Bengali': {
-                title: 'কুইজ AI', subtitle: 'আপনার পছন্দের যেকোনো বিষয় ও ধরণ বাছাই করে কুইজ শুরু করুন!', langLabel: 'ভাষা', countryLabel: 'দেশ', changeBtn: 'পরিবর্তন', modalTitle: 'দেশ বাছাই করুন', searchPlaceholder: 'দেশ খুঁজুন...', nightModeLabel: 'নাইট মোড', soundLabel: 'সাউন্ড', readAloudLabel: 'প্রশ্ন পড়ুন', readOptionsLabel: 'অপশন পড়ুন', feedbackLabel: 'উত্তর ফিডব্যাক', correctResponse: 'সঠিক!', incorrectResponse: 'ভুল। সঠিক উত্তর হলো', challengeCountLabel: 'প্রশ্নের সংখ্যা', topicLabel: 'বিষয় লিখুন (খালি রাখলে সাধারণ জ্ঞান)', topicPlaceholder: 'যেমন: বাংলাদেশ, ক্রিকেট...', levelLabel: 'প্রশ্নের ধরণ', levels: { easy: 'সহজ', medium: 'মধ্যম', hard: 'কঠিন', bcs: 'বিসিএস প্রস্তুতি', custom: 'অন্যান্য' }, customLevelLabel: 'আপনার পছন্দের ধরণ', customLevelPlaceholder: 'যেমন: ব্যাংক জব...', startQuiz: 'কুইজ শুরু করুন', challengeMode: 'চ্যালেঞ্জ মোড', home: 'হোম', score: 'স্কোর', nextQuestion: 'পরবর্তী প্রশ্ন', errorTitle: 'ত্রুটি!', errorTopic: 'অনুগ্রহ করে একটি বিষয় লিখুন।', errorCustomLevel: 'অনুগ্রহ করে আপনার পছন্দের ধরণ লিখুন।', errorFetch: 'প্রশ্ন আনতে সমস্যা হচ্ছে।', errorUnexpected: 'AI থেকে একটি অপ্রত্যাশিত উত্তর এসেছে।', errorFormat: 'AI একটি ভুল ফরম্যাটে ডেটা পাঠিয়েছে।', errorInvalidData: 'AI থেকে পাওয়া ডেটা সঠিক ফরম্যাটে নেই।', errorServer: 'সার্ভার থেকে উত্তর পেতে সমস্যা হচ্ছে।', summaryTitle: 'চ্যালেঞ্জ সম্পন্ন!', summaryTotal: 'মোট প্রশ্ন', summaryCorrect: 'সঠিক উত্তর', summaryIncorrect: 'ভুল উত্তর', summaryPercentage: 'পার্সেন্টেজ', summaryRating: 'রেটিং', ratings: { good: 'ভালো', better: 'আরও ভালো', best: 'সেরা' }, playAgain: 'আবার খেলুন', randomTopicDefault: 'সাধারণ জ্ঞান'
+                title: 'কুইজ AI', subtitle: 'আপনার পছন্দের যেকোনো বিষয় ও ধরণ বাছাই করে কুইজ শুরু করুন!', langLabel: 'ভাষা', countryLabel: 'দেশ', changeBtn: 'পরিবর্তন', modalTitle: 'দেশ বাছাই করুন', searchPlaceholder: 'দেশ খুঁজুন...', nightModeLabel: 'নাইট মোড', soundLabel: 'সাউন্ড', readAloudLabel: 'প্রশ্ন পড়ুন', readOptionsLabel: 'অপশন পড়ুন', feedbackLabel: 'উত্তর ফিডব্যাক', correctResponse: 'সঠিক!', incorrectResponse: 'ভুল। সঠিক উত্তর হলো', challengeCountLabel: 'প্রশ্নের সংখ্যা', topicLabel: 'বিষয় লিখুন (খালি রাখলে সাধারণ জ্ঞান)', topicPlaceholder: 'যেমন: বাংলাদেশ, ক্রিকেট...', levelLabel: 'প্রশ্নের ধরণ', levels: { easy: 'সহজ', medium: 'মধ্যম', hard: 'কঠিন', bcs: 'বিসিএস প্রস্তুতি', custom: 'অন্যান্য' }, customLevelLabel: 'আপনার পছন্দের ধরণ', customLevelPlaceholder: 'যেমন: ব্যাংক জব...', startQuiz: 'কুইজ শুরু করুন', home: 'হোম', score: 'স্কোর', nextQuestion: 'পরবর্তী প্রশ্ন', errorTitle: 'ত্রুটি!', errorTopic: 'অনুগ্রহ করে একটি বিষয় লিখুন।', errorCustomLevel: 'অনুগ্রহ করে আপনার পছন্দের ধরণ লিখুন।', errorFetch: 'প্রশ্ন আনতে সমস্যা হচ্ছে।', errorUnexpected: 'AI থেকে একটি অপ্রত্যাশিত উত্তর এসেছে।', errorFormat: 'AI একটি ভুল ফরম্যাটে ডেটা পাঠিয়েছে।', errorInvalidData: 'AI থেকে পাওয়া ডেটা সঠিক ফরম্যাটে নেই।', errorServer: 'সার্ভার থেকে উত্তর পেতে সমস্যা হচ্ছে।', summaryTitle: 'চ্যালেঞ্জ সম্পন্ন!', summaryTotal: 'মোট প্রশ্ন', summaryCorrect: 'সঠিক উত্তর', summaryIncorrect: 'ভুল উত্তর', summaryPercentage: 'পার্সেন্টেজ', summaryRating: 'রেটিং', ratings: { good: 'ভালো', better: 'আরও ভালো', best: 'সেরা' }, playAgain: 'আবার খেলুন', randomTopicDefault: 'সাধারণ জ্ঞান', modeLabel: 'মোড বাছাই করুন', normalMode: 'সাধারণ', challengeMode: 'চ্যালেঞ্জ'
             },
             'English': {
-                title: 'Quiz AI', subtitle: 'Start a quiz by choosing any topic and difficulty!', langLabel: 'Language', countryLabel: 'Country', changeBtn: 'Change', modalTitle: 'Select a Country', searchPlaceholder: 'Search for a country...', nightModeLabel: 'Night Mode', soundLabel: 'Sound', readAloudLabel: 'Read Question', readOptionsLabel: 'Read Options', feedbackLabel: 'Answer Feedback', correctResponse: 'Correct!', incorrectResponse: 'Incorrect. The correct answer is', challengeCountLabel: 'Number of Questions', topicLabel: 'Enter a topic (leave blank for random)', topicPlaceholder: 'e.g., History, Science...', levelLabel: 'Select difficulty', levels: { easy: 'Easy', medium: 'Intermediate', hard: 'Hard', bcs: 'Job Prep', custom: 'Custom' }, customLevelLabel: 'Enter custom level', customLevelPlaceholder: 'e.g., Medical Entrance...', startQuiz: 'Start Quiz', challengeMode: 'Challenge Mode', home: 'Home', score: 'Score', nextQuestion: 'Next Question', errorTitle: 'Error!', errorTopic: 'Please enter a topic.', errorCustomLevel: 'Please enter a custom level.', errorFetch: 'Failed to fetch question.', errorUnexpected: 'Received an unexpected response from the AI.', errorFormat: 'The AI sent data in a wrong format.', errorInvalidData: 'The data from the AI is not in the correct format.', errorServer: 'Could not get a response from the server.', summaryTitle: 'Challenge Complete!', summaryTotal: 'Total Questions', summaryCorrect: 'Correct Answers', summaryIncorrect: 'Incorrect Answers', summaryPercentage: 'Percentage', summaryRating: 'Rating', ratings: { good: 'Good', better: 'Better', best: 'Best' }, playAgain: 'Play Again', randomTopicDefault: 'General Knowledge'
+                title: 'Quiz AI', subtitle: 'Start a quiz by choosing any topic and difficulty!', langLabel: 'Language', countryLabel: 'Country', changeBtn: 'Change', modalTitle: 'Select a Country', searchPlaceholder: 'Search for a country...', nightModeLabel: 'Night Mode', soundLabel: 'Sound', readAloudLabel: 'Read Question', readOptionsLabel: 'Read Options', feedbackLabel: 'Answer Feedback', correctResponse: 'Correct!', incorrectResponse: 'Incorrect. The correct answer is', challengeCountLabel: 'Number of Questions', topicLabel: 'Enter a topic (leave blank for random)', topicPlaceholder: 'e.g., History, Science...', levelLabel: 'Select difficulty', levels: { easy: 'Easy', medium: 'Intermediate', hard: 'Hard', bcs: 'Job Prep', custom: 'Custom' }, customLevelLabel: 'Enter custom level', customLevelPlaceholder: 'e.g., Medical Entrance...', startQuiz: 'Start Quiz', home: 'Home', score: 'Score', nextQuestion: 'Next Question', errorTitle: 'Error!', errorTopic: 'Please enter a topic.', errorCustomLevel: 'Please enter a custom level.', errorFetch: 'Failed to fetch question.', errorUnexpected: 'Received an unexpected response from the AI.', errorFormat: 'The AI sent data in a wrong format.', errorInvalidData: 'The data from the AI is not in the correct format.', errorServer: 'Could not get a response from the server.', summaryTitle: 'Challenge Complete!', summaryTotal: 'Total Questions', summaryCorrect: 'Correct Answers', summaryIncorrect: 'Incorrect Answers', summaryPercentage: 'Percentage', summaryRating: 'Rating', ratings: { good: 'Good', better: 'Better', best: 'Best' }, playAgain: 'Play Again', randomTopicDefault: 'General Knowledge', modeLabel: 'Select Mode', normalMode: 'Normal', challengeMode: 'Challenge'
             },
             'Hindi': {
-                title: 'क्विज़ AI', subtitle: 'अपनी पसंद का कोई भी विषय और स्तर चुनकर प्रश्नोत्तरी शुरू करें!', langLabel: 'भाषा', countryLabel: 'देश', changeBtn: 'बदलें', modalTitle: 'एक देश चुनें', searchPlaceholder: 'देश खोजें...', nightModeLabel: 'नाइट মোড', soundLabel: 'ध्वनि', readAloudLabel: 'प्रश्न पढ़ें', readOptionsLabel: 'विकल्प पढ़ें', feedbackLabel: 'उत्तर प्रतिक्रिया', correctResponse: 'सही!', incorrectResponse: 'गलत। सही উত্তর है', challengeCountLabel: 'प्रश्नों की संख्या', topicLabel: 'एक विषय दर्ज करें (यादृच्छिक के लिए खाली छोड़ दें)', topicPlaceholder: 'जैसे: भारत, क्रिकेट...', levelLabel: 'कठिनाई स्तर चुनें', levels: { easy: 'सरल', medium: 'मध्यম', hard: 'कठिन', bcs: 'परीक्षा तैयारी', custom: 'अन्य' }, customLevelLabel: 'अपना पसंदीदा स्तर दर्ज करें', customLevelPlaceholder: 'जैसे: बैंक नौकरी...', startQuiz: 'प्रश्नोत्तरी शुरू करें', challengeMode: 'चैलेंज মোড', home: 'होम', score: 'स्कोर', nextQuestion: 'अगला प्रश्न', errorTitle: 'त्रुटि!', errorTopic: 'कृपया एक विषय दर्ज करें।', errorCustomLevel: 'कृपया अपना पसंदीदा स्तर दर्ज करें।', errorFetch: 'प्रश्न प्राप्त करने में विफल।', errorUnexpected: 'AI से एक अप्रत्याक्षित प्रतिक्रिया मिली।', errorFormat: 'AI ने गलत प्रारूप में डेटा भेजा।', errorInvalidData: 'AI से मिला डेटा सही प्रारूप में नहीं है।', errorServer: 'सर्वर से कोई प्रतिक्रिया नहीं मिल सकी।', summaryTitle: 'चुनौती पूरी हुई!', summaryTotal: 'कुल प्रश्न', summaryCorrect: 'सही उत्तर', summaryIncorrect: 'गलत उत्तर', summaryPercentage: 'प्रतिशत', summaryRating: 'रेटिंग', ratings: { good: 'अच्छा', better: 'बेहतर', best: 'सर्वश्रेष्ठ' }, playAgain: 'फिर से खेलें', randomTopicDefault: 'सामान्य ज्ञान'
+                title: 'क्विज़ AI', subtitle: 'अपनी पसंद का कोई भी विषय और स्तर चुनकर प्रश्नोत्तरी शुरू करें!', langLabel: 'भाषा', countryLabel: 'देश', changeBtn: 'बदलें', modalTitle: 'एक देश चुनें', searchPlaceholder: 'देश खोजें...', nightModeLabel: 'नाइट মোড', soundLabel: 'ध्वनि', readAloudLabel: 'प्रश्न पढ़ें', readOptionsLabel: 'विकल्प पढ़ें', feedbackLabel: 'उत्तर प्रतिक्रिया', correctResponse: 'सही!', incorrectResponse: 'गलत। सही উত্তর है', challengeCountLabel: 'प्रश्नों की संख्या', topicLabel: 'एक विषय दर्ज करें (यादृच्छिक के लिए खाली छोड़ दें)', topicPlaceholder: 'जैसे: भारत, क्रिकेट...', levelLabel: 'कठिनाई स्तर चुनें', levels: { easy: 'सरल', medium: 'मध्यम', hard: 'कठिन', bcs: 'परीक्षा तैयारी', custom: 'अन्य' }, customLevelLabel: 'अपना पसंदीदा स्तर दर्ज करें', customLevelPlaceholder: 'जैसे: बैंक नौकरी...', startQuiz: 'प्रश्नोत्तरी शुरू करें', home: 'होम', score: 'स्कोर', nextQuestion: 'अगला प्रश्न', errorTitle: 'त्रुटि!', errorTopic: 'कृपया एक विषय दर्ज करें।', errorCustomLevel: 'कृपया अपना पसंदीदा स्तर दर्ज करें।', errorFetch: 'प्रश्न प्राप्त करने में विफल।', errorUnexpected: 'AI से एक अप्रत्याक्षित प्रतिक्रिया मिली।', errorFormat: 'AI ने गलत प्रारूप में डेटा भेजा।', errorInvalidData: 'AI से मिला डेटा सही प्रारूप में नहीं है।', errorServer: 'सर्वर से कोई प्रतिक्रिया नहीं मिल सकी।', summaryTitle: 'चुनौती पूरी हुई!', summaryTotal: 'कुल प्रश्न', summaryCorrect: 'सही उत्तर', summaryIncorrect: 'गलत उत्तर', summaryPercentage: 'प्रतिशत', summaryRating: 'रेटिंग', ratings: { good: 'अच्छा', better: 'बेहतर', best: 'सर्वश्रेष्ठ' }, playAgain: 'फिर से खेलें', randomTopicDefault: 'सामान्य ज्ञान', modeLabel: 'मोड चुनें', normalMode: 'सामान्य', challengeMode: 'चुनौती'
             },
             'Spanish': {
-                title: 'Quiz AI', subtitle: '¡Inicia un cuestionario eligiendo cualquier tema y dificultad!', langLabel: 'Idioma', countryLabel: 'País', changeBtn: 'Cambiar', modalTitle: 'Selecciona un país', searchPlaceholder: 'Buscar un país...', nightModeLabel: 'Modo Noche', soundLabel: 'Sonido', readAloudLabel: 'Leer Pregunta', readOptionsLabel: 'Leer Opciones', feedbackLabel: 'Respuesta de audio', correctResponse: '¡Correcto!', incorrectResponse: 'Incorrecto. La respuesta correcta es', challengeCountLabel: 'Número de preguntas', topicLabel: 'Introduce un tema (deja en blanco para aleatorio)', topicPlaceholder: 'Ej: Historia, Ciencia...', levelLabel: 'Selecciona el nivel', levels: { easy: 'Fácil', medium: 'Intermedio', hard: 'Difícil', bcs: 'Preparación Examen', custom: 'Personalizado' }, customLevelLabel: 'Introduce un nivel personalizado', customLevelPlaceholder: 'Ej: Examen Médico...', startQuiz: 'Iniciar Cuestionario', challengeMode: 'Modo Desafío', home: 'Inicio', score: 'Puntuación', nextQuestion: 'Siguiente Pregunta', errorTitle: '¡Error!', errorTopic: 'Por favor, introduce un tema.', errorCustomLevel: 'Por favor, introduce un nivel personalizado.', errorFetch: 'Error al obtener la pregunta.', errorUnexpected: 'Se recibió una respuesta inesperada de la IA.', errorFormat: 'La IA envió datos en un formato incorrecto.', errorInvalidData: 'Los datos de la IA no están en el formato correcto.', errorServer: 'No se pudo obtener una respuesta del servidor.', summaryTitle: '¡Desafío Completo!', summaryTotal: 'Total de Preguntas', summaryCorrect: 'Respuestas Correctas', summaryIncorrect: 'Respuestas Incorrectas', summaryPercentage: 'Porcentaje', summaryRating: 'Calificación', ratings: { good: 'Bueno', better: 'Mejor', best: 'Excelente' }, playAgain: 'Jugar de Nuevo', randomTopicDefault: 'Conocimiento General'
+                title: 'Quiz AI', subtitle: '¡Inicia un cuestionario eligiendo cualquier tema y dificultad!', langLabel: 'Idioma', countryLabel: 'País', changeBtn: 'Cambiar', modalTitle: 'Selecciona un país', searchPlaceholder: 'Buscar un país...', nightModeLabel: 'Modo Noche', soundLabel: 'Sonido', readAloudLabel: 'Leer Pregunta', readOptionsLabel: 'Leer Opciones', feedbackLabel: 'Respuesta de audio', correctResponse: '¡Correcto!', incorrectResponse: 'Incorrecto. La respuesta correcta es', challengeCountLabel: 'Número de preguntas', topicLabel: 'Introduce un tema (deja en blanco para aleatorio)', topicPlaceholder: 'Ej: Historia, Ciencia...', levelLabel: 'Selecciona el nivel', levels: { easy: 'Fácil', medium: 'Intermedio', hard: 'Difícil', bcs: 'Preparación Examen', custom: 'Personalizado' }, customLevelLabel: 'Introduce un nivel personalizado', customLevelPlaceholder: 'Ej: Examen Médico...', startQuiz: 'Iniciar Cuestionario', home: 'Inicio', score: 'Puntuación', nextQuestion: 'Siguiente Pregunta', errorTitle: '¡Error!', errorTopic: 'Por favor, introduce un tema.', errorCustomLevel: 'Por favor, introduce un nivel personalizado.', errorFetch: 'Error al obtener la pregunta.', errorUnexpected: 'Se recibió una respuesta inesperada de la IA.', errorFormat: 'La IA envió datos en un formato incorrecto.', errorInvalidData: 'Los datos de la IA no están en el formato correcto.', errorServer: 'No se pudo obtener una respuesta del servidor.', summaryTitle: '¡Desafío Completo!', summaryTotal: 'Total de Preguntas', summaryCorrect: 'Respuestas Correctas', summaryIncorrect: 'Respuestas Incorrectas', summaryPercentage: 'Porcentaje', summaryRating: 'Calificación', ratings: { good: 'Bueno', better: 'Mejor', best: 'Excelente' }, playAgain: 'Jugar de Nuevo', randomTopicDefault: 'Conocimiento General', modeLabel: 'Seleccionar modo', normalMode: 'Normal', challengeMode: 'Desafío'
             }
         };
 
@@ -406,7 +416,6 @@
             document.getElementById('custom-level-label').textContent = t.customLevelLabel;
             customLevelInput.placeholder = t.customLevelPlaceholder;
             startQuizBtn.textContent = t.startQuiz;
-            challengeModeBtn.textContent = t.challengeMode;
             document.getElementById('challenge-count-label').textContent = t.challengeCountLabel;
             document.getElementById('score-label').textContent = t.score;
             nextQuestionBtn.textContent = t.nextQuestion;
@@ -425,6 +434,9 @@
             document.getElementById('summary-incorrect-label').textContent = t.summaryIncorrect;
             document.getElementById('summary-percentage-label').textContent = t.summaryPercentage;
             playAgainBtn.textContent = t.playAgain;
+            document.getElementById('mode-label').textContent = t.modeLabel;
+            normalModeBtn.textContent = t.normalMode;
+            challengeModeBtn.textContent = t.challengeMode;
 
             levelSelect.innerHTML = `
                 <option value="${t.levels.easy}">${t.levels.easy}</option>
@@ -556,8 +568,7 @@
             setSoundToggleState(feedbackToggle, 'feedbackEnabled', isEnabled);
         });
         
-        startQuizBtn.addEventListener('click', () => startQuiz(false));
-        challengeModeBtn.addEventListener('click', () => startQuiz(true));
+        startQuizBtn.addEventListener('click', () => startQuiz());
         playAgainBtn.addEventListener('click', goToHome);
         nextQuestionBtn.addEventListener('click', fetchNewQuestion);
         homeBtn.addEventListener('click', goToHome);
@@ -583,12 +594,35 @@
         }
 
         customLevelInput.addEventListener('input', clearPrefetchAndRestart);
+
+        function updateSwitchUI() {
+            if (isChallengeMode) {
+                switchBg.style.transform = 'translateX(100%)';
+                challengeOptions.classList.remove('hidden');
+                normalModeBtn.classList.remove('text-indigo-600', 'dark:text-white');
+                challengeModeBtn.classList.add('text-indigo-600', 'dark:text-white');
+            } else {
+                switchBg.style.transform = 'translateX(0%)';
+                challengeOptions.classList.add('hidden');
+                challengeModeBtn.classList.remove('text-indigo-600', 'dark:text-white');
+                normalModeBtn.classList.add('text-indigo-600', 'dark:text-white');
+            }
+        }
+
+        normalModeBtn.addEventListener('click', () => {
+            isChallengeMode = false;
+            updateSwitchUI();
+        });
+
+        challengeModeBtn.addEventListener('click', () => {
+            isChallengeMode = true;
+            updateSwitchUI();
+        });
         
 
         // --- Core Quiz Logic ---
 
-        function startQuiz(isChallenge) {
-            isChallengeMode = isChallenge;
+        function startQuiz() {
             currentTopic = topicInput.value.trim();
             const t = translations[currentLanguage] || translations['English'];
             
@@ -1008,6 +1042,8 @@
                 countryModal.classList.remove('hidden');
                 updateLanguageUI('English'); 
             }
+            
+            updateSwitchUI();
         }
 
         initializeApp();
