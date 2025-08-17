@@ -59,7 +59,7 @@
         
         /* --- Night Mode Styles --- */
         .dark body { background-color: #111827; }
-        .dark #app-container, .dark #menu-panel, .dark #country-modal > div { background-color: #1f2937; border-color: #4b5563; }
+        .dark #app-container, .dark #country-modal > div { background-color: #1f2937; border-color: #4b5563; }
         .dark h1, .dark p, .dark label, .dark span, .dark h2, .dark h3, .dark strong { color: #d1d5db; }
         .dark button, .dark input, .dark select { color: #d1d5db; }
         .dark input, .dark select { background-color: #374151; border-color: #4b5563; }
@@ -102,15 +102,15 @@
 
     <div id="app-container" class="w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-6 md:p-8 transition-all duration-300 relative">
         
-        <!-- Menu Button (3 dots) -->
+        <!-- Menu Button -->
         <div class="absolute top-4 right-4">
-            <button id="menu-btn" class="p-2 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <button id="menu-btn" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
-            <!-- Dropdown Menu Panel for Settings -->
-            <div id="menu-panel" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl z-10 p-4">
+            <!-- MODIFIED: Added solid background and border for light/dark modes -->
+            <div id="menu-panel" class="hidden absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl z-50 p-4">
                 <!-- Country & Language Section -->
                 <div class="space-y-4">
                     <div>
@@ -168,7 +168,6 @@
             <h1 id="main-title" class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-2 mt-8"></h1>
             <p id="subtitle" class="text-center text-gray-500 mb-8"></p>
             
-            <!-- MODIFIED: Moved Mode Switch to the top -->
             <div class="mb-6">
                 <label class="block text-sm font-medium text-gray-700 mb-2 text-center" id="mode-label"></label>
                 <div class="relative flex w-full max-w-xs mx-auto p-1 bg-gray-200 dark:bg-gray-700 rounded-lg">
@@ -1050,4 +1049,4 @@
 
     </script>
 </body>
-</html>
+    </html>
