@@ -68,9 +68,9 @@
         .dark #menu-btn:hover, .dark #close-modal-btn:hover { background-color: #374151; }
         .dark #country-modal-list .country-item:hover { background-color: #374151; }
         .dark #error-box { background-color: #4b1d1d; border-color: #992c2c; color: #fca5a5; }
-        .dark #quiz-topic { background-color: #312e81 !important; color: #e0e7ff !important; }
+        .dark #quiz-topic { background-color: transparent !important; color: #a5b4fc !important; }
         .dark .custom-radio:checked { border-color: #1f2937; }
-        .dark .border, .dark .border-t { border-color: #4b5563; }
+        .dark .border, .dark .border-b, .dark .border-t { border-color: #4b5563; }
         .dark .hover\:bg-indigo-50:hover { background-color: rgba(99, 102, 241, 0.1); }
         .dark .bg-green-100 { background-color: #064e3b; border-color: #10b981 !important; }
         .dark .bg-red-100 { background-color: #7f1d1d; border-color: #ef4444 !important; }
@@ -200,10 +200,31 @@
 
         <!-- View 2: Active Quiz -->
         <div id="quiz-view" class="hidden">
-            <div class="flex justify-between items-center mb-4">
-                <button id="home-btn" class="bg-gray-200 text-gray-700 font-semibold px-4 py-2 rounded-lg hover:bg-gray-300 transition"></button>
-                <h2 class="text-xl font-bold text-indigo-600 bg-indigo-100 px-4 py-1 rounded-full" id="quiz-topic"></h2>
-                <div class="text-lg font-semibold text-gray-700"><span id="score-label"></span>: <span id="score">0/0</span></div>
+            <!-- MODIFIED: New Header Design -->
+            <div class="relative flex items-center justify-between mb-6 border-b pb-4">
+                <!-- Home Button with Icon -->
+                <button id="home-btn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                </button>
+
+                <!-- Topic in the middle -->
+                <div class="absolute left-1/2 -translate-x-1/2 text-center">
+                    <h2 class="text-lg sm:text-xl font-bold text-indigo-600 dark:text-indigo-400" id="quiz-topic-title"></h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400" id="quiz-topic-details"></p>
+                </div>
+
+                <!-- Score on the right -->
+                <div class="flex items-center space-x-2 bg-gray-100 dark:bg-gray-700 rounded-full px-4 py-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <div class="text-md font-semibold text-gray-700 dark:text-gray-200">
+                        <span id="score-label" class="hidden"></span>
+                        <span id="score">0/0</span>
+                    </div>
+                </div>
             </div>
             
             <div id="timer-bar-container" class="mb-4 hidden">
@@ -275,7 +296,9 @@
         const startQuizBtn = document.getElementById('start-quiz-btn');
         const challengeModeBtn = document.getElementById('challenge-mode-btn');
         const challengeCountSelect = document.getElementById('challenge-count-select');
-        const quizTopic = document.getElementById('quiz-topic');
+        // MODIFIED: New elements for the redesigned header
+        const quizTopicTitle = document.getElementById('quiz-topic-title');
+        const quizTopicDetails = document.getElementById('quiz-topic-details');
         const scoreEl = document.getElementById('score');
         const loader = document.getElementById('loader');
         const quizContent = document.getElementById('quiz-content');
@@ -366,7 +389,8 @@
             startQuizBtn.textContent = t.startQuiz;
             challengeModeBtn.textContent = t.challengeMode;
             document.getElementById('challenge-count-label').textContent = t.challengeCountLabel;
-            homeBtn.textContent = t.home;
+            // The home button is now an icon, but we can set its text for accessibility if needed
+            // homeBtn.textContent = t.home; 
             document.getElementById('score-label').textContent = t.score;
             nextQuestionBtn.textContent = t.nextQuestion;
             document.getElementById('error-title').textContent = t.errorTitle;
@@ -928,7 +952,11 @@
         function updateScore() {
             const total = isChallengeMode ? totalChallengeQuestions : askedQuestions.length;
             const currentCount = isChallengeMode ? challengeQuestionCount : askedQuestions.length;
-            quizTopic.textContent = isChallengeMode ? `${currentTopic} (${currentLevel}) (${currentCount}/${total})` : `${currentTopic} (${currentLevel})`;
+            
+            // --- MODIFIED: Update the new header elements ---
+            quizTopicTitle.textContent = currentTopic;
+            quizTopicDetails.textContent = isChallengeMode ? `${currentLevel} (${currentCount}/${total})` : currentLevel;
+            
             scoreEl.innerHTML = `<span class="text-green-600 font-bold">${score}</span><span class="text-gray-500">/${isChallengeMode ? total : (currentCount > 0 ? currentCount : 0)}</span>`;
         }
 
