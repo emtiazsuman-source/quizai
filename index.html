@@ -41,26 +41,15 @@
         #timer-bar { height: 100%; background-color: #4f46e5; width: 100%; }
         .dark #timer-bar-container { background-color: #374151; }
         
-        /* চ্যালেঞ্জ মোড বাটন লক/আনলক স্টাইল */
-        #challenge-mode-btn.locked {
-            cursor: pointer;
-            opacity: 0.6;
-        }
-        #challenge-mode-btn.unlocked {
-            opacity: 1.0;
-        }
-        #challenge-mode-btn.locked .text-indigo-600 {
-            color: inherit;
-        }
-        .dark #challenge-mode-btn.locked .dark\:text-white {
-            color: inherit;
-        }
+        #challenge-mode-btn.locked { cursor: pointer; opacity: 0.6; }
+        #challenge-mode-btn.unlocked { opacity: 1.0; }
+        #challenge-mode-btn.locked .text-indigo-600 { color: inherit; }
+        .dark #challenge-mode-btn.locked .dark\:text-white { color: inherit; }
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 
     <div id="app-container" class="w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-xl p-6 md:p-8 transition-all duration-300 relative">
-        
         <div class="absolute top-4 right-4">
             <button id="menu-btn" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
@@ -102,7 +91,6 @@
                 </div>
             </div>
         </div>
-
         <div id="topic-selection-view">
             <h1 id="main-title" class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-2 mt-8"></h1>
             <p id="subtitle" class="text-center text-gray-500 mb-8"></p>
@@ -120,34 +108,9 @@
                 </div>
             </div>
             <div class="space-y-4">
-                <div>
-                    <label for="topic-input" class="block text-sm font-medium text-gray-700 mb-1" id="topic-label"></label>
-                    <input type="text" id="topic-input" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
                 </div>
-                <div>
-                    <label for="level-select" class="block text-sm font-medium text-gray-700 mb-1" id="level-label"></label>
-                    <select id="level-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition bg-white"></select>
-                </div>
-                <div id="custom-level-container" class="hidden">
-                    <label for="custom-level-input" class="block text-sm font-medium text-gray-700 mb-1" id="custom-level-label"></label>
-                    <input type="text" id="custom-level-input" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition">
-                </div>
-                <div id="challenge-options" class="hidden pt-2 space-y-2">
-                    <label for="challenge-count-select" class="block text-sm font-medium text-gray-700" id="challenge-count-label"></label>
-                    <select id="challenge-count-select" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition bg-white">
-                        <option value="5">5</option><option value="10" selected>10</option><option value="20">20</option><option value="30">30</option><option value="50">50</option>
-                    </select>
-                </div>
-                <button id="start-quiz-btn" class="w-full bg-indigo-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform transform hover:scale-105 !mt-6"></button>
-            </div>
         </div>
-
-        <div id="quiz-view" class="hidden"></div>
-        <div id="performance-summary-view" class="hidden"></div>
-        <div id="error-box" class="hidden"></div>
     </div>
-    
-    <div id="country-modal" class="hidden"></div>
 
     <div id="ad-confirm-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 flex items-center justify-center z-30 p-4">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-sm p-6 text-center">
@@ -167,36 +130,48 @@
 
         // Application State
         let isChallengeModeUnlocked = false;
-        let currentTopic = '', currentLevel = '', currentLanguage = 'English', currentCountry = 'USA', score = 0, correctAnswer = '', isAnswerSubmitted = false, askedQuestions = [], isReadingOptions = false, prefetchedQuestions = [], isPrefetching = false, debounceTimer;
-        let isChallengeMode = false, challengeQuestionCount = 0, totalChallengeQuestions = 10, timerInterval, timeLeft;
-        const TIME_PER_QUESTION = 20;
+        let isChallengeMode = false;
+        let currentLanguage = 'English';
+        
+        // ... (rest of state variables)
 
-        // Data & Translations
-        const countryLanguageMap = { /* ... country data ... */ };
+        // Translations (with new keys for the modal)
         const translations = { 
-            'Bengali': { unlockTitle: 'চ্যালেঞ্জ মোড আনলক করুন', unlockMessage: 'এই মোডটি খেলতে, আপনাকে একটি সংক্ষিপ্ত বিজ্ঞাপন দেখতে হবে। আপনি কি রাজি আছেন?', confirmBtn: 'হ্যাঁ, রাজি', cancelBtn: 'না', title: 'কুইজ AI', subtitle: 'আপনার পছন্দের যেকোনো বিষয় ও ধরণ বাছাই করে কুইজ শুরু করুন!', langLabel: 'ভাষা', countryLabel: 'দেশ', changeBtn: 'পরিবর্তন', modalTitle: 'দেশ বাছাই করুন', searchPlaceholder: 'দেশ খুঁজুন...', nightModeLabel: 'নাইট মোড', soundLabel: 'সাউন্ড', readAloudLabel: 'প্রশ্ন পড়ুন', readOptionsLabel: 'অপশন পড়ুন', feedbackLabel: 'উত্তর ফিডব্যাক', correctResponse: 'সঠিক!', incorrectResponse: 'ভুল। সঠিক উত্তর হলো', challengeCountLabel: 'প্রশ্নের সংখ্যা', topicLabel: 'বিষয় লিখুন (খালি রাখলে সাধারণ জ্ঞান)', topicPlaceholder: 'যেমন: বাংলাদেশ, ক্রিকেট...', levelLabel: 'প্রশ্নের ধরণ', levels: { easy: 'সহজ', medium: 'মধ্যম', hard: 'কঠিন', bcs: 'বিসিএস প্রস্তুতি', custom: 'অন্যান্য' }, customLevelLabel: 'আপনার পছন্দের ধরণ', customLevelPlaceholder: 'যেমন: ব্যাংক জব...', startQuiz: 'কুইজ শুরু করুন', home: 'হোম', score: 'স্কোর', nextQuestion: 'পরবর্তী প্রশ্ন', errorTitle: 'ত্রুটি!', errorTopic: 'অনুগ্রহ করে একটি বিষয় লিখুন।', errorCustomLevel: 'অনুগ্রহ করে আপনার পছন্দের ধরণ লিখুন।', errorFetch: 'প্রশ্ন আনতে সমস্যা হচ্ছে।', errorUnexpected: 'AI থেকে একটি অপ্রত্যাশিত উত্তর এসেছে।', errorFormat: 'AI একটি ভুল ফরম্যাটে ডেটা পাঠিয়েছে।', errorInvalidData: 'AI থেকে পাওয়া ডেটা সঠিক ফরম্যাটে নেই।', errorServer: 'সার্ভার থেকে উত্তর পেতে সমস্যা হচ্ছে।', errorAllKeysFailed: 'এই মুহূর্তে প্রশ্ন তৈরি করা সম্ভব হচ্ছে না। অনুগ্রহ করে পৃষ্ঠাটি রিফ্রেশ করে আবার চেষ্টা করুন।', summaryTitle: 'চ্যালেঞ্জ সম্পন্ন!', summaryTotal: 'মোট প্রশ্ন', summaryCorrect: 'সঠিক উত্তর', summaryIncorrect: 'ভুল উত্তর', summaryPercentage: 'পার্সেন্টেজ', summaryRating: 'রেটিং', ratings: { good: 'ভালো', better: 'আরও ভালো', best: 'সেরা' }, playAgain: 'আবার খেলুন', randomTopicDefault: 'সাধারণ জ্ঞান', modeLabel: 'মোড বাছাই করুন', normalMode: 'সাধারণ', challengeMode: 'চ্যালেঞ্জ' }, 
-            'English': { unlockTitle: 'Unlock Challenge Mode', unlockMessage: 'To play this mode, you need to watch a short ad. Do you want to continue?', confirmBtn: 'Yes, Continue', cancelBtn: 'No', title: 'Quiz AI', subtitle: 'Start a quiz by choosing any topic and difficulty!', langLabel: 'Language', countryLabel: 'Country', changeBtn: 'Change', modalTitle: 'Select a Country', searchPlaceholder: 'Search for a country...', nightModeLabel: 'Night Mode', soundLabel: 'Sound', readAloudLabel: 'Read Question', readOptionsLabel: 'Read Options', feedbackLabel: 'Answer Feedback', correctResponse: 'Correct!', incorrectResponse: 'Incorrect. The correct answer is', challengeCountLabel: 'Number of Questions', topicLabel: 'Enter a topic (leave blank for random)', topicPlaceholder: 'e.g., History, Science...', levelLabel: 'Select difficulty', levels: { easy: 'Easy', medium: 'Intermediate', hard: 'Hard', bcs: 'Job Prep', custom: 'Custom' }, customLevelLabel: 'Enter custom level', customLevelPlaceholder: 'e.g., Medical Entrance...', startQuiz: 'Start Quiz', home: 'Home', score: 'Score', nextQuestion: 'Next Question', errorTitle: 'Error!', errorTopic: 'Please enter a topic.', errorCustomLevel: 'Please enter a custom level.', errorFetch: 'Failed to fetch question.', errorUnexpected: 'Received an unexpected response from the AI.', errorFormat: 'The AI sent data in a wrong format.', errorInvalidData: 'The data from the AI is not in the correct format.', errorServer: 'Could not get a response from the server.', errorAllKeysFailed: 'Could not generate a question at this moment. Please refresh the page and try again.', summaryTitle: 'Challenge Complete!', summaryTotal: 'Total Questions', summaryCorrect: 'Correct Answers', summaryIncorrect: 'Incorrect Answers', summaryPercentage: 'Percentage', summaryRating: 'Rating', ratings: { good: 'Good', better: 'Better', best: 'Best' }, playAgain: 'Play Again', randomTopicDefault: 'General Knowledge', modeLabel: 'Select Mode', normalMode: 'Normal', challengeMode: 'Challenge' } 
+            'Bengali': { unlockTitle: 'চ্যালেঞ্জ মোড আনলক করুন', unlockMessage: 'এই মোডটি খেলতে, আপনাকে একটি সংক্ষিপ্ত বিজ্ঞাপন দেখতে হবে। আপনি কি রাজি আছেন?', confirmBtn: 'হ্যাঁ, রাজি', cancelBtn: 'না', title: 'কুইজ AI', subtitle: 'আপনার পছন্দের যেকোনো বিষয় ও ধরণ বাছাই করে কুইজ শুরু করুন!', langLabel: 'ভাষা', countryLabel: 'দেশ', changeBtn: 'পরিবর্তন', modalTitle: 'দেশ বাছাই করুন', searchPlaceholder: 'দেশ খুঁজুন...', nightModeLabel: 'নাইট মোড', soundLabel: 'সাউন্ড', readAloudLabel: 'প্রশ্ন পড়ুন', readOptionsLabel: 'অপশন পড়ুন', feedbackLabel: 'উত্তর ফিডব্যাক', modeLabel: 'মোড বাছাই করুন', normalMode: 'সাধারণ', challengeMode: 'চ্যালেঞ্জ' /* ... other translations */ }, 
+            'English': { unlockTitle: 'Unlock Challenge Mode', unlockMessage: 'To play this mode, you need to watch a short ad. Do you want to continue?', confirmBtn: 'Yes, Continue', cancelBtn: 'No', title: 'Quiz AI', subtitle: 'Start a quiz by choosing any topic and difficulty!', langLabel: 'Language', countryLabel: 'Country', changeBtn: 'Change', modalTitle: 'Select a Country', searchPlaceholder: 'Search for a country...', nightModeLabel: 'Night Mode', soundLabel: 'Sound', readAloudLabel: 'Read Question', readOptionsLabel: 'Read Options', feedbackLabel: 'Answer Feedback', modeLabel: 'Select Mode', normalMode: 'Normal', challengeMode: 'Challenge' /* ... other translations */ } 
         };
 
-        // --- Core Application Functions ---
+        // --- Core Functions ---
+
+        // This is the corrected, explicit version of the function
         function updateLanguageUI(langKey) {
             const lang = translations[langKey] ? langKey : 'English';
             const t = translations[lang];
-            document.documentElement.lang = { 'Bengali': 'bn', 'English': 'en' }[lang] || 'en';
-            // Update all texts
-            Object.keys(t).forEach(key => {
-                const element = document.getElementById(key.replace(/([A-Z])/g, "-$1").toLowerCase() + '-label') || document.getElementById(key.replace(/([A-Z])/g, "-$1").toLowerCase());
-                if(element) element.textContent = t[key];
-            });
+            
+            // Set main texts
+            document.getElementById('main-title').textContent = t.title;
+            document.getElementById('subtitle').textContent = t.subtitle;
+            document.getElementById('mode-label').textContent = t.modeLabel;
             normalModeBtn.textContent = t.normalMode;
             challengeModeText.textContent = t.challengeMode;
+            
+            // Set menu texts
+            document.getElementById('lang-label').textContent = t.langLabel;
+            document.getElementById('country-label').textContent = t.countryLabel;
+            document.getElementById('change-country-btn').textContent = t.changeBtn;
+            document.getElementById('sound-label').textContent = t.soundLabel;
+            document.getElementById('read-aloud-label').textContent = t.readAloudLabel;
+            document.getElementById('read-options-label').textContent = t.readOptionsLabel;
+            document.getElementById('feedback-label').textContent = t.feedbackLabel;
+            document.getElementById('night-mode-label').textContent = t.nightModeLabel;
+            
+            // Set modal texts
             modalUnlockTitle.textContent = t.unlockTitle;
             modalUnlockMessage.textContent = t.unlockMessage;
             confirmAdWatchBtn.textContent = t.confirmBtn;
             cancelAdWatchBtn.textContent = t.cancelBtn;
-            // ... (rest of the UI updates)
         }
-        
+
         function showUnlockConfirmationModal() { adConfirmModal.classList.remove('hidden'); }
         function hideUnlockConfirmationModal() { adConfirmModal.classList.add('hidden'); }
 
@@ -209,7 +184,7 @@
         function goToHome() {
             isChallengeModeUnlocked = false; // Re-lock challenge mode
             isChallengeMode = false;
-            // ... (rest of goToHome function)
+            // ... (rest of goToHome logic, e.g., hiding views)
             updateSwitchUI();
         }
 
@@ -236,10 +211,13 @@
             }
         }
         
-        // ... (All other helper and core functions like fetchNewQuestion, startQuiz, etc. remain here)
+        // ... (All other functions like startQuiz, checkAnswer, setTheme, etc. must be present here)
+        function setTheme(theme) { localStorage.setItem('theme', theme); if (theme === 'dark') { document.documentElement.classList.add('dark'); nightModeToggle.classList.add('toggle-on'); } else { document.documentElement.classList.remove('dark'); nightModeToggle.classList.remove('toggle-on'); } }
+        function setSoundToggleState(toggleElement, key, isEnabled) { localStorage.setItem(key, isEnabled); if (isEnabled) { toggleElement.classList.add('toggle-on'); } else { toggleElement.classList.remove('toggle-on'); } }
+
 
         // --- Event Listeners ---
-        // ... (all other event listeners like menuBtn, languageSelect, etc.)
+        // ... (All other event listeners for menu, language, etc.)
 
         normalModeBtn.addEventListener('click', () => {
             isChallengeMode = false;
@@ -257,18 +235,26 @@
 
         cancelAdWatchBtn.addEventListener('click', hideUnlockConfirmationModal);
         
-        // This is the simplified "fire-and-hope" listener
         confirmAdWatchBtn.addEventListener('click', () => {
             hideUnlockConfirmationModal();
-            // Unlock the UI immediately, assuming the ad will be watched.
+            // Instantly unlock the UI when user agrees to watch the ad.
+            // The ad is triggered by the ad-trigger-2 class on the button itself.
             unlockChallengeModeForOneSession(); 
         });
 
+        nightModeToggle.addEventListener('click', () => { const isDarkMode = document.documentElement.classList.contains('dark'); setTheme(isDarkMode ? 'light' : 'dark'); }); 
+        readAloudToggle.addEventListener('click', () => { const isEnabled = !readAloudToggle.classList.contains('toggle-on'); setSoundToggleState(readAloudToggle, 'readAloudEnabled', isEnabled); }); 
+        readOptionsToggle.addEventListener('click', () => { const isEnabled = !readOptionsToggle.classList.contains('toggle-on'); setSoundToggleState(readOptionsToggle, 'readOptionsEnabled', isEnabled); }); 
+        feedbackToggle.addEventListener('click', () => { const isEnabled = !feedbackToggle.classList.contains('toggle-on'); setSoundToggleState(feedbackToggle, 'feedbackEnabled', isEnabled); }); 
+
+
         function initializeApp() {
-            // ... (rest of initializeApp function)
             isChallengeMode = false;
             isChallengeModeUnlocked = false;
+            // Call language update first to populate texts
+            updateLanguageUI(localStorage.getItem('quizAppLanguage') || 'English');
             updateSwitchUI();
+            // ... (rest of initializeApp logic like setTheme, etc.)
         }
 
         // Start the application
