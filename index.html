@@ -1,67 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <title>Ad Trigger Test</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    body { font-family: Arial, sans-serif; padding: 24px; }
-    .row { margin-bottom: 16px; }
-    button, a.test-link {
-      padding: 12px 18px; margin-right: 12px; text-decoration: none;
-      background: #1976d2; color: #fff; border: none; border-radius: 6px; display: inline-block;
-    }
-    a.test-link { background: #388e3c; }
-    .wrap { border: 1px dashed #aaa; padding: 10px; display: inline-block; }
-    #log { margin-top: 20px; font-size: 14px; white-space: pre-line; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Test</title>
+    <style>
+        /* মোবাইল ডিভাইসের জন্য কিছু বেসিক স্টাইল */
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 20px;
+            font-family: sans-serif;
+            background-color: #f0f2f5;
+        }
+        .ad-button {
+            width: 80%;
+            max-width: 320px;
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        /* প্রথম বাটনের জন্য ক্লাস */
+        .ad-trigger-1 {
+            background-color: #1877f2; /* নীল রঙ */
+        }
+        /* দ্বিতীয় বাটনের জন্য ক্লাস */
+        .ad-trigger-2 {
+            background-color: #42b72a; /* সবুজ রঙ */
+        }
+    </style>
 </head>
 <body>
-  <h2>Ad Trigger Test Page</h2>
 
-  <div class="row">
-    <button class="ad-trigger-1" id="btnInter">Show Interstitial (ad-trigger-1)</button>
-    <button class="ad-trigger-2" id="btnReward">Show Rewarded (ad-trigger-2)</button>
-  </div>
+    <button class="ad-button ad-trigger-1">
+        বিজ্ঞাপন দেখুন (Type 1)
+    </button>
 
-  <div class="row">
-    <a class="ad-trigger-1 test-link" href="https://example.com/" target="_self">
-      Interstitial Link (navigates after ad)
-    </a>
-    <a class="ad-trigger-2 test-link" href="https://example.com/" target="_self">
-      Rewarded Link (navigates after ad)
-    </a>
-  </div>
+    <button class="ad-button ad-trigger-2">
+        রিওয়ার্ড বিজ্ঞাপন দেখুন (Type 2)
+    </button>
+    
+    <script>
+        document.addEventListener('click', function(event) {
+            const button = event.target.closest('.ad-button');
+            if (!button) return;
 
-  <div class="row">
-    <div class="wrap ad-trigger-1">
-      <button id="wrappedInterBtn">Wrapper Interstitial (class on wrapper)</button>
-    </div>
-    <div class="wrap ad-trigger-2">
-      <button id="wrappedRewardBtn">Wrapper Rewarded (class on wrapper)</button>
-    </div>
-  </div>
+            let adType = null;
+            let token = String(Date.now()); // একটি সিম্পল টোকেন
 
-  <div id="log">Log:</div>
+            if (button.classList.contains('ad-trigger-1')) {
+                adType = 'interstitial';
+            } else if (button.classList.contains('ad-trigger-2')) {
+                adType = 'rewarded';
+            }
 
-  <script>
-    function log(msg) {
-      document.getElementById('log').textContent += '\n' + msg;
-    }
+            if (adType && typeof AndroidAd !== 'undefined') {
+                if (adType === 'interstitial') {
+                    AndroidAd.requestInterstitial(token);
+                } else if (adType === 'rewarded') {
+                    AndroidAd.requestRewarded(token);
+                }
+            } else if (adType) {
+                // অ্যাপের বাইরে টেস্ট করার জন্য
+                alert(adType + ' ad button clicked!');
+            }
+        });
+    </script>
 
-    // Optional: local click behaviors so you can see the re-click after ad
-    document.getElementById('btnInter').addEventListener('click', function() {
-      log('btnInter clicked');
-    });
-    document.getElementById('btnReward').addEventListener('click', function() {
-      log('btnReward clicked');
-    });
-    document.getElementById('wrappedInterBtn').addEventListener('click', function() {
-      log('wrappedInterBtn clicked');
-    });
-    document.getElementById('wrappedRewardBtn').addEventListener('click', function() {
-      log('wrappedRewardBtn clicked');
-    });
-  </script>
 </body>
 </html>
