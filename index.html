@@ -1,89 +1,116 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Rewarded Ad Demo</title>
-  <style>
-    button { padding: 10px 16px; margin: 6px; }
-    #status { margin-top: 10px; font-family: Arial, sans-serif; }
-  </style>
-  <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
-  <script>
-    window.googletag = window.googletag || {cmd: []};
-
-    let rewardedSlot = null;
-    let rewardedReady = false;
-
-    googletag.cmd.push(function() {
-      // Replace with your Ad Manager ad unit path
-      const adUnitPath = "/1234567/my_rewarded_unit";
-
-      // Define a rewarded out-of-page slot
-      rewardedSlot = googletag.defineOutOfPageSlot(
-        adUnitPath,
-        googletag.enums.OutOfPageFormat.REWARDED
-      );
-
-      if (rewardedSlot) {
-        rewardedSlot.addService(googletag.pubads());
-
-        // Reward callbacks
-        googletag.pubads().addEventListener('rewardedSlotReady', function(event) {
-          if (event.slot === rewardedSlot) {
-            rewardedReady = true;
-            setStatus("Rewarded ad is ready. Click 'Show Rewarded Ad'.");
-          }
-        });
-
-        googletag.pubads().addEventListener('rewardedSlotClosed', function(event) {
-          if (event.slot === rewardedSlot) {
-            setStatus("Ad closed. You can grant reward here.");
-            // TODO: Grant reward to the user in your app logic
-            // After showing once, you typically need to load again
-            rewardedReady = false;
-          }
-        });
-
-        googletag.pubads().addEventListener('slotRenderEnded', function(event) {
-          if (event.slot === rewardedSlot && event.isEmpty) {
-            setStatus("No fill: no rewarded ad available right now.");
-          }
-        });
-
-        googletag.enableServices();
-      } else {
-        setStatus("Failed to create rewarded slot. Check ad unit path and GAM setup.");
-      }
-    });
-
-    function loadRewarded() {
-      rewardedReady = false;
-      setStatus("Loading rewarded ad...");
-      googletag.cmd.push(function() {
-        googletag.pubads().refresh([rewardedSlot]);
-      });
-    }
-
-    function showRewarded() {
-      if (!rewardedReady) {
-        setStatus("Ad not ready yet. Click 'Load Rewarded Ad' first.");
-        return;
-      }
-      setStatus("Showing rewarded ad...");
-      googletag.cmd.push(function() {
-        rewardedSlot && rewardedSlot.show();
-      });
-    }
-
-    function setStatus(msg) {
-      document.getElementById('status').innerText = msg;
-    }
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ad Test Page</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f7f9;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .button {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .button:active {
+            transform: scale(0.97);
+        }
+        /* আপনার strings.xml এ দেওয়া ক্লাস অনুযায়ী নাম দিন */
+        .ad-trigger-1 {
+            background: linear-gradient(45deg, #007bff, #0056b3); /* Interstitial Ad Button */
+        }
+        .ad-trigger-2 {
+            background: linear-gradient(45deg, #28a745, #1e7e34); /* Rewarded Ad Button */
+        }
+    </style>
 </head>
 <body>
-  <h3>Rewarded Ad Demo</h3>
-  <button onclick="loadRewarded()">Load Rewarded Ad</button>
-  <button onclick="showRewarded()">Show Rewarded Ad</button>
-  <div id="status">Idle</div>
+
+    <div class="container">
+        <h1>Ad Test Page 🧪</h1>
+        <p>নিচের বাটনে ক্লিক করে আপনার অ্যাপের বিজ্ঞাপন সঠিকভাবে কাজ করছে কি না তা পরীক্ষা করুন।</p>
+        
+        <button class="button ad-trigger-1">Show Interstitial Ad</button>
+
+        <button class="button ad-trigger-2">Show Rewarded Ad</button>
+    </div>
+
+    <script>
+        // এই JavaScript কোডটি আপনার অ্যাপে ইনজেক্ট করা কোডের মতোই কাজ করবে।
+        // তবে অ্যাপের বাইরে সাধারণ ব্রাউজারে টেস্ট করার জন্য এখানে একটি alert যোগ করা হয়েছে।
+
+        document.addEventListener('click', function(event) {
+            
+            // বাটন বা এর ভেতরের কোনো অংশে ক্লিক হয়েছে কি না তা চেক করা
+            const button = event.target.closest('button');
+            if (!button) {
+                return;
+            }
+
+            let adType = null;
+            let token = String(Date.now()) + Math.random().toString(36).slice(2);
+
+            // কোন ক্লাসের বাটনে ক্লিক হয়েছে তা নির্ণয় করা
+            if (button.classList.contains('ad-trigger-1')) {
+                adType = 'interstitial';
+            } else if (button.classList.contains('ad-trigger-2')) {
+                adType = 'rewarded';
+            }
+
+            // যদি adType পাওয়া যায়, তাহলে অ্যাপের সাথে যোগাযোগ করার চেষ্টা করা
+            if (adType) {
+                // চেক করা হচ্ছে অ্যাপের জাভাস্ক্রিপ্ট ইন্টারফেস (AndroidAd) আছে কি না
+                if (typeof AndroidAd !== 'undefined' && AndroidAd !== null) {
+                    
+                    console.log('AndroidAd interface found. Requesting ad type: ' + adType);
+                    
+                    if (adType === 'interstitial' && typeof AndroidAd.requestInterstitial === 'function') {
+                        AndroidAd.requestInterstitial(token);
+                    } else if (adType === 'rewarded' && typeof AndroidAd.requestRewarded === 'function') {
+                        AndroidAd.requestRewarded(token);
+                    }
+
+                } else {
+                    // যদি অ্যাপের ইন্টারফেস না পাওয়া যায় (যেমন: কম্পিউটারের ব্রাউজারে খোলা হলে)
+                    console.log('AndroidAd interface not found. This is a test alert.');
+                    alert('আপনি "' + adType.toUpperCase() + ' Ad" বাটনে ক্লিক করেছেন।\nঅ্যাপের মধ্যে থাকলে এখন বিজ্ঞাপন দেখা যেত।');
+                }
+            }
+        });
+    </script>
+
 </body>
 </html>
