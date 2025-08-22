@@ -69,21 +69,21 @@
                     <div class="space-y-2">
                         <div class="flex items-center justify-between">
                             <span class="text-sm text-gray-600" id="read-aloud-label"></span>
-                            <button id="read-aloud-toggle" class="trigger-2 relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gray-200"><span class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out translate-x-1"></span></button>
+                            <button id="read-aloud-toggle" class="ad-trigger-2 relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gray-200"><span class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out translate-x-1"></span></button>
                         </div>
                         <div class="flex items-center justify-between">
                             <span class="text-sm text-gray-600" id="read-options-label"></span>
-                            <button id="read-options-toggle" class="trigger-2 relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gray-200"><span class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out translate-x-1"></span></button>
+                            <button id="read-options-toggle" class="ad-trigger-2 relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gray-200"><span class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out translate-x-1"></span></button>
                         </div>
                         <div class="flex items-center justify-between">
                             <span class="text-sm text-gray-600" id="feedback-label"></span>
-                            <button id="feedback-toggle" class="trigger-2 relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gray-200"><span class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out translate-x-1"></span></button>
+                            <button id="feedback-toggle" class="ad-trigger-2 relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gray-200"><span class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out translate-x-1"></span></button>
                         </div>
                     </div>
                 </div>
                 <div class="flex items-center justify-between pt-3 mt-3 border-t">
                     <label class="block text-sm font-medium text-gray-700" id="night-mode-label"></label>
-                    <button id="night-mode-toggle" class="trigger-1 relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gray-200"><span class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out translate-x-1"></span></button>
+                    <button id="night-mode-toggle" class="ad-trigger-2 relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 bg-gray-200"><span class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out translate-x-1"></span></button>
                 </div>
             </div>
         </div>
@@ -96,7 +96,7 @@
                 <div class="relative flex w-full max-w-xs mx-auto p-1 bg-gray-200 dark:bg-gray-700 rounded-lg">
                     <div id="switch-bg" class="absolute top-1 left-1 h-[calc(100%-8px)] w-1/2 bg-white dark:bg-gray-800 rounded-md shadow-md transition-transform duration-300 ease-in-out"></div>
                     <button id="normal-mode-btn" class="relative w-1/2 py-2 text-sm font-semibold z-10 transition-colors"></button>
-                    <button id="challenge-mode-btn" class="relative w-1/2 py-2 text-sm font-semibold z-10 transition-colors"></button>
+                    <button id="challenge-mode-btn" class="ad-trigger-2 relative w-1/2 py-2 text-sm font-semibold z-10 transition-colors"></button>
                 </div>
             </div>
             <div class="space-y-4">
@@ -190,87 +190,11 @@
 
         // Data & Translations
         const countryLanguageMap = { "Afghanistan": { primary: "Pashto", relevant: ["Pashto", "Dari", "English"] }, "Argentina": { primary: "Spanish", relevant: ["Spanish", "English"] }, "Australia": { primary: "English", relevant: ["English"] }, "Bangladesh": { primary: "Bengali", relevant: ["Bengali", "English"] }, "Brazil": { primary: "Portuguese", relevant: ["Portuguese", "English", "Spanish"] }, "Canada": { primary: "English", relevant: ["English", "French"] }, "China": { primary: "Mandarin", relevant: ["Mandarin", "English"] }, "Egypt": { primary: "Arabic", relevant: ["Arabic", "English"] }, "France": { primary: "French", relevant: ["French", "English"] }, "Germany": { primary: "German", relevant: ["German", "English"] }, "India": { primary: "Hindi", relevant: ["Hindi", "English", "Bengali"] }, "Indonesia": { primary: "Indonesian", relevant: ["Indonesian", "English"] }, "Italy": { primary: "Italian", relevant: ["Italian", "English"] }, "Japan": { primary: "Japanese", relevant: ["Japanese", "English"] }, "Mexico": { primary: "Spanish", relevant: ["Spanish", "English"] }, "Nigeria": { primary: "English", relevant: ["English", "Hausa", "Yoruba", "Igbo"] }, "Pakistan": { primary: "Urdu", relevant: ["Urdu", "English"] }, "Russia": { primary: "Russian", relevant: ["Russian", "English"] }, "Saudi Arabia": { primary: "Arabic", relevant: ["Arabic", "English"] }, "South Korea": { primary: "Korean", relevant: ["Korean", "English"] }, "Spain": { primary: "Spanish", relevant: ["Spanish", "English", "Catalan"] }, "Turkey": { primary: "Turkish", relevant: ["Turkish", "English"] }, "United Kingdom": { primary: "English", relevant: ["English"] }, "USA": { primary: "English", relevant: ["English", "Spanish"] } };
-        const translations = { 
-            'Bengali': { title: 'কুইজ AI', subtitle: 'আপনার পছন্দের যেকোনো বিষয় ও ধরণ বাছাই করে কুইজ শুরু করুন!', langLabel: 'ভাষা', countryLabel: 'দেশ', changeBtn: 'পরিবর্তন', modalTitle: 'দেশ বাছাই করুন', searchPlaceholder: 'দেশ খুঁজুন...', nightModeLabel: 'নাইট মোড', soundLabel: 'সাউন্ড', readAloudLabel: 'প্রশ্ন পড়ুন', readOptionsLabel: 'অপশন পড়ুন', feedbackLabel: 'উত্তর ফিডব্যাক', correctResponse: 'সঠিক!', incorrectResponse: 'ভুল। সঠিক উত্তর হলো', challengeCountLabel: 'প্রশ্নের সংখ্যা', topicLabel: 'বিষয় লিখুন (খালি রাখলে সাধারণ জ্ঞান)', topicPlaceholder: 'যেমন: বাংলাদেশ, ক্রিকেট...', levelLabel: 'প্রশ্নের ধরণ', levels: { easy: 'সহজ', medium: 'মধ্যম', hard: 'কঠিন', bcs: 'বিসিএস প্রস্তুতি', custom: 'অন্যান্য' }, customLevelLabel: 'আপনার পছন্দের ধরণ', customLevelPlaceholder: 'যেমন: ব্যাংক জব...', startQuiz: 'কুইজ শুরু করুন', home: 'হোম', score: 'স্কোর', nextQuestion: 'পরবর্তী প্রশ্ন', errorTitle: 'ত্রুটি!', errorTopic: 'অনুগ্রহ করে একটি বিষয় লিখুন।', errorCustomLevel: 'অনুগ্রহ করে আপনার পছন্দের ধরণ লিখুন।', errorFetch: 'প্রশ্ন আনতে সমস্যা হচ্ছে।', errorUnexpected: 'AI থেকে একটি অপ্রত্যাশিত উত্তর এসেছে।', errorFormat: 'AI একটি ভুল ফরম্যাটে ডেটা পাঠিয়েছে।', errorInvalidData: 'AI থেকে পাওয়া ডেটা সঠিক ফরম্যাটে নেই।', errorServer: 'সার্ভার থেকে উত্তর পেতে সমস্যা হচ্ছে।', errorAllKeysFailed: 'এই মুহূর্তে প্রশ্ন তৈরি করা সম্ভব হচ্ছে না। অনুগ্রহ করে পৃষ্ঠাটি রিফ্রেশ করে আবার চেষ্টা করুন।', summaryTitle: 'চ্যালেঞ্জ সম্পন্ন!', summaryTotal: 'মোট প্রশ্ন', summaryCorrect: 'সঠিক উত্তর', summaryIncorrect: 'ভুল উত্তর', summaryPercentage: 'পার্সেন্টেজ', summaryRating: 'রেটিং', ratings: { good: 'ভালো', better: 'আরও ভালো', best: 'সেরা' }, playAgain: 'আবার খেলুন', randomTopicDefault: 'সাধারণ জ্ঞান', modeLabel: 'মোড বাছাই করুন', normalMode: 'সাধারণ', challengeMode: 'চ্যালেঞ্জ' }, 
-            'English': { title: 'Quiz AI', subtitle: 'Start a quiz by choosing any topic and difficulty!', langLabel: 'Language', countryLabel: 'Country', changeBtn: 'Change', modalTitle: 'Select a Country', searchPlaceholder: 'Search for a country...', nightModeLabel: 'Night Mode', soundLabel: 'Sound', readAloudLabel: 'Read Question', readOptionsLabel: 'Read Options', feedbackLabel: 'Answer Feedback', correctResponse: 'Correct!', incorrectResponse: 'Incorrect. The correct answer is', challengeCountLabel: 'Number of Questions', topicLabel: 'Enter a topic (leave blank for random)', topicPlaceholder: 'e.g., History, Science...', levelLabel: 'Select difficulty', levels: { easy: 'Easy', medium: 'Intermediate', hard: 'Hard', bcs: 'Job Prep', custom: 'Custom' }, customLevelLabel: 'Enter custom level', customLevelPlaceholder: 'e.g., Medical Entrance...', startQuiz: 'Start Quiz', home: 'Home', score: 'Score', nextQuestion: 'Next Question', errorTitle: 'Error!', errorTopic: 'Please enter a topic.', errorCustomLevel: 'Please enter a custom level.', errorFetch: 'Failed to fetch question.', errorUnexpected: 'Received an unexpected response from the AI.', errorFormat: 'The AI sent data in a wrong format.', errorInvalidData: 'The data from the AI is not in the correct format.', errorServer: 'Could not get a response from the server.', errorAllKeysFailed: 'Could not generate a question at this moment. Please refresh the page and try again.', summaryTitle: 'Challenge Complete!', summaryTotal: 'Total Questions', summaryCorrect: 'Correct Answers', summaryIncorrect: 'Incorrect Answers', summaryPercentage: 'Percentage', summaryRating: 'Rating', ratings: { good: 'Good', better: 'Better', best: 'Best' }, playAgain: 'Play Again', randomTopicDefault: 'General Knowledge', modeLabel: 'Select Mode', normalMode: 'Normal', challengeMode: 'Challenge' } 
-        };
+        const translations = { 'Bengali': { title: 'কুইজ AI', subtitle: 'আপনার পছন্দের যেকোনো বিষয় ও ধরণ বাছাই করে কুইজ শুরু করুন!', langLabel: 'ভাষা', countryLabel: 'দেশ', changeBtn: 'পরিবর্তন', modalTitle: 'দেশ বাছাই করুন', searchPlaceholder: 'দেশ খুঁজুন...', nightModeLabel: 'নাইট মোড', soundLabel: 'সাউন্ড', readAloudLabel: 'প্রশ্ন পড়ুন', readOptionsLabel: 'অপশন পড়ুন', feedbackLabel: 'উত্তর ফিডব্যাক', correctResponse: 'সঠিক!', incorrectResponse: 'ভুল। সঠিক উত্তর হলো', challengeCountLabel: 'প্রশ্নের সংখ্যা', topicLabel: 'বিষয় লিখুন (খালি রাখলে সাধারণ জ্ঞান)', topicPlaceholder: 'যেমন: বাংলাদেশ, ক্রিকেট...', levelLabel: 'প্রশ্নের ধরণ', levels: { easy: 'সহজ', medium: 'মধ্যম', hard: 'কঠিন', bcs: 'বিসিএস প্রস্তুতি', custom: 'অন্যান্য' }, customLevelLabel: 'আপনার পছন্দের ধরণ', customLevelPlaceholder: 'যেমন: ব্যাংক জব...', startQuiz: 'কুইজ শুরু করুন', home: 'হোম', score: 'স্কোর', nextQuestion: 'পরবর্তী প্রশ্ন', errorTitle: 'ত্রুটি!', errorTopic: 'অনুগ্রহ করে একটি বিষয় লিখুন।', errorCustomLevel: 'অনুগ্রহ করে আপনার পছন্দের ধরণ লিখুন।', errorFetch: 'প্রশ্ন আনতে সমস্যা হচ্ছে।', errorUnexpected: 'AI থেকে একটি অপ্রত্যাশিত উত্তর এসেছে।', errorFormat: 'AI একটি ভুল ফরম্যাটে ডেটা পাঠিয়েছে।', errorInvalidData: 'AI থেকে পাওয়া ডেটা সঠিক ফরম্যাটে নেই।', errorServer: 'সার্ভার থেকে উত্তর পেতে সমস্যা হচ্ছে।', errorAllKeysFailed: 'এই মুহূর্তে প্রশ্ন তৈরি করা সম্ভব হচ্ছে না। অনুগ্রহ করে পৃষ্ঠাটি রিফ্রেশ করে আবার চেষ্টা করুন।', summaryTitle: 'চ্যালেঞ্জ সম্পন্ন!', summaryTotal: 'মোট প্রশ্ন', summaryCorrect: 'সঠিক উত্তর', summaryIncorrect: 'ভুল উত্তর', summaryPercentage: 'পার্সেন্টেজ', summaryRating: 'রেটিং', ratings: { good: 'ভালো', better: 'আরও ভালো', best: 'সেরা' }, playAgain: 'আবার খেলুন', randomTopicDefault: 'সাধারণ জ্ঞান', modeLabel: 'মোড বাছাই করুন', normalMode: 'সাধারণ', challengeMode: 'চ্যালেঞ্জ' }, 'English': { title: 'Quiz AI', subtitle: 'Start a quiz by choosing any topic and difficulty!', langLabel: 'Language', countryLabel: 'Country', changeBtn: 'Change', modalTitle: 'Select a Country', searchPlaceholder: 'Search for a country...', nightModeLabel: 'Night Mode', soundLabel: 'Sound', readAloudLabel: 'Read Question', readOptionsLabel: 'Read Options', feedbackLabel: 'Answer Feedback', correctResponse: 'Correct!', incorrectResponse: 'Incorrect. The correct answer is', challengeCountLabel: 'Number of Questions', topicLabel: 'Enter a topic (leave blank for random)', topicPlaceholder: 'e.g., History, Science...', levelLabel: 'Select difficulty', levels: { easy: 'Easy', medium: 'Intermediate', hard: 'Hard', bcs: 'Job Prep', custom: 'Custom' }, customLevelLabel: 'Enter custom level', customLevelPlaceholder: 'e.g., Medical Entrance...', startQuiz: 'Start Quiz', home: 'Home', score: 'Score', nextQuestion: 'Next Question', errorTitle: 'Error!', errorTopic: 'Please enter a topic.', errorCustomLevel: 'Please enter a custom level.', errorFetch: 'Failed to fetch question.', errorUnexpected: 'Received an unexpected response from the AI.', errorFormat: 'The AI sent data in a wrong format.', errorInvalidData: 'The data from the AI is not in the correct format.', errorServer: 'Could not get a response from the server.', errorAllKeysFailed: 'Could not generate a question at this moment. Please refresh the page and try again.', summaryTitle: 'Challenge Complete!', summaryTotal: 'Total Questions', summaryCorrect: 'Correct Answers', summaryIncorrect: 'Incorrect Answers', summaryPercentage: 'Percentage', summaryRating: 'Rating', ratings: { good: 'Good', better: 'Better', best: 'Best' }, playAgain: 'Play Again', randomTopicDefault: 'General Knowledge', modeLabel: 'Select Mode', normalMode: 'Normal', challengeMode: 'Challenge' } };
 
-        // --- Core Functions ---
-
-        /**
-         * This function now calls your own secure API endpoint on Vercel.
-         * @param {string} prompt The prompt to send to the backend.
-         * @returns {Promise<object>} The parsed JSON response from your Vercel function.
-         */
-        async function generateQuestionViaApi(prompt) {
-            // This URL points to your Vercel serverless function.
-            const apiUrl = '/api/generateQuiz'; 
-            const payload = { prompt };
-            try {
-                const response = await fetch(apiUrl, { 
-                    method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify(payload) 
-                });
-                if (!response.ok) { 
-                    const errorData = await response.json(); 
-                    // Re-throw the specific message from the server
-                    throw new Error(errorData.message || 'Server error'); 
-                }
-                return await response.json();
-            } catch (error) { 
-                console.error("API call failed:", error); 
-                throw error; 
-            }
-        }
-        
-        async function fetchNewQuestion() { 
-            if (isChallengeMode && challengeQuestionCount >= totalChallengeQuestions) { 
-                showPerformanceSummary(); 
-                return; 
-            } 
-            if (prefetchedQuestions.length > 0) { 
-                const dataToShow = prefetchedQuestions.shift(); 
-                displayQuestion(dataToShow); 
-                return; 
-            } 
-            showLoader(true); 
-            isAnswerSubmitted = false; 
-            nextQuestionBtn.classList.add('hidden'); 
-            optionsEl.innerHTML = ''; 
-            questionEl.textContent = ''; 
-            const t = translations[currentLanguage] || translations['English']; 
-            const historyPrompt = `Please generate a new and different question that is not similar to these previous questions: ["${askedQuestions.slice(-10).join('", "')}"].`; 
-            let prompt = `Generate a multiple-choice quiz question about "${currentTopic}" at the "${currentLevel}" level, in ${currentLanguage}.`; 
-            if (currentTopic !== t.randomTopicDefault) { 
-                prompt += ` The question should be relevant to ${currentCountry}.`; 
-            } 
-            prompt += ` ${historyPrompt} Provide a clean JSON response with keys "question", "options" (an array of 4), and "correct_answer".`; 
-            try { 
-                const quizObject = await generateQuestionViaApi(prompt); 
-                if (!quizObject?.question || !quizObject.options?.length || !quizObject.correct_answer) { 
-                    throw new Error(t.errorInvalidData); 
-                } 
-                displayQuestion(quizObject); 
-                hideError(); 
-            } catch (error) {
-                console.error('Error fetching quiz question:', error);
-                const t = translations[currentLanguage] || translations['English'];
-                let displayMessage = `${t.errorFetch} ${error.message}`;
-
-                // Check for the specific backend failure message and show the user-friendly one
-                if (error.message && error.message.includes('All available API keys failed')) {
-                    displayMessage = t.errorAllKeysFailed; 
-                }
-                
-                showError(displayMessage);
-            } finally { 
-                showLoader(false); 
-            } 
-        }
-
-        // --- UI and Helper Functions (mostly unchanged) ---
-
+        // --- Core Application Functions ---
+        async function generateQuestionViaApi(prompt) { const apiUrl = '/api/generateQuiz'; const payload = { prompt }; try { const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); if (!response.ok) { const errorData = await response.json(); throw new Error(errorData.message || 'Server error'); } return await response.json(); } catch (error) { console.error("API call failed:", error); throw error; } }
+        async function fetchNewQuestion() { if (isChallengeMode && challengeQuestionCount >= totalChallengeQuestions) { showPerformanceSummary(); return; } if (prefetchedQuestions.length > 0) { const dataToShow = prefetchedQuestions.shift(); displayQuestion(dataToShow); return; } showLoader(true); isAnswerSubmitted = false; nextQuestionBtn.classList.add('hidden'); optionsEl.innerHTML = ''; questionEl.textContent = ''; const t = translations[currentLanguage] || translations['English']; const historyPrompt = `Please generate a new and different question that is not similar to these previous questions: ["${askedQuestions.slice(-10).join('", "')}"].`; let prompt = `Generate a multiple-choice quiz question about "${currentTopic}" at the "${currentLevel}" level, in ${currentLanguage}.`; if (currentTopic !== t.randomTopicDefault) { prompt += ` The question should be relevant to ${currentCountry}.`; } prompt += ` ${historyPrompt} Provide a clean JSON response with keys "question", "options" (an array of 4), and "correct_answer".`; try { const quizObject = await generateQuestionViaApi(prompt); if (!quizObject?.question || !quizObject.options?.length || !quizObject.correct_answer) { throw new Error(t.errorInvalidData); } displayQuestion(quizObject); hideError(); } catch (error) { console.error('Error fetching quiz question:', error); const t = translations[currentLanguage] || translations['English']; let displayMessage = `${t.errorFetch} ${error.message}`; if (error.message && error.message.includes('All available API keys failed')) { displayMessage = t.errorAllKeysFailed; } showError(displayMessage); } finally { showLoader(false); } }
         function updateLanguageUI(langKey) { const lang = translations[langKey] ? langKey : 'English'; const t = translations[lang]; document.documentElement.lang = { 'Bengali': 'bn', 'English': 'en' }[lang] || 'en'; document.getElementById('main-title').textContent = t.title; document.getElementById('subtitle').textContent = t.subtitle; document.getElementById('lang-label').textContent = t.langLabel; document.getElementById('country-label').textContent = t.countryLabel; document.getElementById('topic-label').textContent = t.topicLabel; topicInput.placeholder = t.topicPlaceholder; document.getElementById('level-label').textContent = t.levelLabel; document.getElementById('custom-level-label').textContent = t.customLevelLabel; customLevelInput.placeholder = t.customLevelPlaceholder; startQuizBtn.textContent = t.startQuiz; document.getElementById('challenge-count-label').textContent = t.challengeCountLabel; document.getElementById('score-label').textContent = t.score; nextQuestionBtn.textContent = t.nextQuestion; document.getElementById('error-title').textContent = t.errorTitle; changeCountryBtn.textContent = t.changeBtn; document.getElementById('modal-title').textContent = t.modalTitle; countrySearchInput.placeholder = t.searchPlaceholder; document.getElementById('night-mode-label').textContent = t.nightModeLabel; document.getElementById('sound-label').textContent = t.soundLabel; document.getElementById('read-aloud-label').textContent = t.readAloudLabel; document.getElementById('read-options-label').textContent = t.readOptionsLabel; document.getElementById('feedback-label').textContent = t.feedbackLabel; document.getElementById('summary-title').textContent = t.summaryTitle; document.getElementById('summary-total-label').textContent = t.summaryTotal; document.getElementById('summary-correct-label').textContent = t.summaryCorrect; document.getElementById('summary-incorrect-label').textContent = t.summaryIncorrect; document.getElementById('summary-percentage-label').textContent = t.summaryPercentage; playAgainBtn.textContent = t.playAgain; document.getElementById('mode-label').textContent = t.modeLabel; normalModeBtn.textContent = t.normalMode; challengeModeBtn.textContent = t.challengeMode; levelSelect.innerHTML = `<option value="${t.levels.easy}">${t.levels.easy}</option><option value="${t.levels.medium}">${t.levels.medium}</option><option value="${t.levels.hard}">${t.levels.hard}</option><option value="${t.levels.bcs}">${t.levels.bcs}</option><option value="custom">${t.levels.custom}</option>`; }
         function populateCountries() { countryModalList.innerHTML = ''; const countries = Object.keys(countryLanguageMap).sort(); countries.forEach(country => { const item = document.createElement('div'); item.className = 'p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer country-item'; item.textContent = country; item.dataset.country = country; item.addEventListener('click', () => selectCountry(country)); countryModalList.appendChild(item); }); }
         function selectCountry(country) { currentCountry = country; selectedCountryText.textContent = country; updateLanguageOptions(country); countryModal.classList.add('hidden'); localStorage.setItem('quizAppCountry', country); if (topicSelectionView.classList.contains('hidden') && quizView.classList.contains('hidden')) { topicSelectionView.classList.remove('hidden'); } }
@@ -292,7 +216,7 @@
         function updateSwitchUI() { if (isChallengeMode) { switchBg.style.transform = 'translateX(100%)'; challengeOptions.classList.remove('hidden'); normalModeBtn.classList.remove('text-indigo-600', 'dark:text-white'); challengeModeBtn.classList.add('text-indigo-600', 'dark:text-white'); } else { switchBg.style.transform = 'translateX(0%)'; challengeOptions.classList.add('hidden'); challengeModeBtn.classList.remove('text-indigo-600', 'dark:text-white'); normalModeBtn.classList.add('text-indigo-600', 'dark:text-white'); } }
         function clearPrefetchAndRestart() { clearTimeout(debounceTimer); prefetchedQuestions = []; const topic = topicInput.value.trim(); if (topic.length > 2 || topic.length === 0) { managePrefetching(); } }
         
-        // --- Event Listeners ---
+        // --- Event Listeners (এই অংশটি সহজ করা হয়েছে) ---
         menuBtn.addEventListener('click', () => menuPanel.classList.toggle('hidden')); 
         document.addEventListener('click', (e) => { if (!menuBtn.contains(e.target) && !menuPanel.contains(e.target)) { menuPanel.classList.add('hidden'); } }); 
         changeCountryBtn.addEventListener('click', () => { countryModal.classList.remove('hidden'); menuPanel.classList.add('hidden'); }); 
@@ -301,22 +225,23 @@
         countrySearchInput.addEventListener('input', (e) => { const searchTerm = e.target.value.toLowerCase(); const countryItems = countryModalList.querySelectorAll('.country-item'); countryItems.forEach(item => { const countryName = item.textContent.toLowerCase(); item.style.display = countryName.includes(searchTerm) ? 'block' : 'none'; }); }); 
         languageSelect.addEventListener('change', (e) => { currentLanguage = e.target.value; updateLanguageUI(currentLanguage); clearPrefetchAndRestart(); }); 
         levelSelect.addEventListener('change', () => { const t = translations[currentLanguage] || translations['English']; const isCustom = levelSelect.value === 'custom' || levelSelect.options[levelSelect.selectedIndex].text === t.levels.custom; customLevelContainer.classList.toggle('hidden', !isCustom); clearPrefetchAndRestart(); }); 
+        
+        // বাটনগুলোর সাধারণ কাজ
         nightModeToggle.addEventListener('click', () => { const isDarkMode = document.documentElement.classList.contains('dark'); setTheme(isDarkMode ? 'light' : 'dark'); }); 
         readAloudToggle.addEventListener('click', () => { const isEnabled = !readAloudToggle.classList.contains('toggle-on'); setSoundToggleState(readAloudToggle, 'readAloudEnabled', isEnabled); }); 
         readOptionsToggle.addEventListener('click', () => { const isEnabled = !readOptionsToggle.classList.contains('toggle-on'); setSoundToggleState(readOptionsToggle, 'readOptionsEnabled', isEnabled); }); 
         feedbackToggle.addEventListener('click', () => { const isEnabled = !feedbackToggle.classList.contains('toggle-on'); setSoundToggleState(feedbackToggle, 'feedbackEnabled', isEnabled); }); 
+        
         startQuizBtn.addEventListener('click', () => startQuiz()); 
         playAgainBtn.addEventListener('click', goToHome); 
         nextQuestionBtn.addEventListener('click', fetchNewQuestion); 
         homeBtn.addEventListener('click', goToHome); 
         topicInput.addEventListener('input', () => { clearTimeout(debounceTimer); prefetchedQuestions = []; const topic = topicInput.value.trim(); if (topic.length > 2) { debounceTimer = setTimeout(() => { managePrefetching(); }, 700); } });
         customLevelInput.addEventListener('input', clearPrefetchAndRestart);
+
         normalModeBtn.addEventListener('click', () => { isChallengeMode = false; updateSwitchUI(); }); 
         challengeModeBtn.addEventListener('click', () => { isChallengeMode = true; updateSwitchUI(); });
 
-        /**
-         * Initializes the application on page load.
-         */
         function initializeApp() { 
             populateCountries(); 
             const savedTheme = localStorage.getItem('theme'); 
@@ -332,6 +257,7 @@
                 countryModal.classList.remove('hidden'); 
                 updateLanguageUI('English'); 
             } 
+            isChallengeMode = false;
             updateSwitchUI(); 
         }
 
