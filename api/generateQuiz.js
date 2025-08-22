@@ -4,16 +4,16 @@
 
 // Read up to 20 API keys from Vercel Environment Variables.
 const GEMINI_API_KEYS = [
-  process.env.GEMINI_API_KEY1, process.env.GEMINI_API_KEY2,
-  process.env.GEMINI_API_KEY3, process.env.GEMINI_API_KEY4,
-  process.env.GEMINI_API_KEY5, process.env.GEMINI_API_KEY6,
-  process.env.GEMINI_API_KEY7, process.env.GEMINI_API_KEY8,
-  process.env.GEMINI_API_KEY9, process.env.GEMINI_API_KEY10,
-  process.env.GEMINI_API_KEY11, process.env.GEMINI_API_KEY12,
-  process.env.GEMINI_API_KEY13, process.env.GEMINI_API_KEY14,
-  process.env.GEMINI_API_KEY15, process.env.GEMINI_API_KEY16,
-  process.env.GEMINI_API_KEY17, process.env.GEMINI_API_KEY18,
-  process.env.GEMINI_API_KEY19, process.env.GEMINI_API_KEY20,
+  process.env.GEMINI_API_1, process.env.GEMINI_API_2,
+  process.env.GEMINI_API_3, process.env.GEMINI_API_4,
+  process.env.GEMINI_API_5, process.env.GEMINI_API_6,
+  process.env.GEMINI_API_7, process.env.GEMINI_API_8,
+  process.env.GEMINI_API_9, process.env.GEMINI_API_10,
+  process.env.GEMINI_API_11, process.env.GEMINI_API_12,
+  process.env.GEMINI_API_13, process.env.GEMINI_API_14,
+  process.env.GEMINI_API_15, process.env.GEMINI_API_16,
+  process.env.GEMINI_API_17, process.env.GEMINI_API_18,
+  process.env.GEMINI_API_19, process.env.GEMINI_API_20,
 ].filter(Boolean); // Removes any keys that are not set.
 
 /**
