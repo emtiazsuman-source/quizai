@@ -40,6 +40,18 @@
         #timer-bar-container { height: 8px; background-color: #e5e7eb; border-radius: 4px; overflow: hidden; }
         #timer-bar { height: 100%; background-color: #4f46e5; width: 100%; }
         .dark #timer-bar-container { background-color: #374151; }
+        
+        /* চ্যালেঞ্জ মোড লক করার জন্য নতুন CSS */
+        #challenge-mode-btn.locked {
+            cursor: pointer;
+            opacity: 0.6;
+        }
+        #challenge-mode-btn.locked .text-indigo-600 {
+            color: inherit;
+        }
+        .dark #challenge-mode-btn.locked .dark\:text-white {
+            color: inherit;
+        }
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
@@ -96,7 +108,14 @@
                 <div class="relative flex w-full max-w-xs mx-auto p-1 bg-gray-200 dark:bg-gray-700 rounded-lg">
                     <div id="switch-bg" class="absolute top-1 left-1 h-[calc(100%-8px)] w-1/2 bg-white dark:bg-gray-800 rounded-md shadow-md transition-transform duration-300 ease-in-out"></div>
                     <button id="normal-mode-btn" class="relative w-1/2 py-2 text-sm font-semibold z-10 transition-colors"></button>
-                    <button id="challenge-mode-btn" class="ad-trigger-2 relative w-1/2 py-2 text-sm font-semibold z-10 transition-colors"></button>
+                    <button id="challenge-mode-btn" class="ad-trigger-2 relative w-1/2 py-2 text-sm font-semibold z-10 transition-colors flex items-center justify-center gap-2">
+                        <span id="lock-icon" class="hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clip-rule="evenodd" />
+                            </svg>
+                        </span>
+                        <span id="challenge-mode-text"></span>
+                    </button>
                 </div>
             </div>
             <div class="space-y-4">
@@ -178,31 +197,47 @@
             <div id="country-modal-list" class="p-4 max-h-64 overflow-y-auto"></div>
         </div>
     </div>
-
+    
     <script>
         // DOM Element Selections
-        const topicSelectionView = document.getElementById('topic-selection-view'), quizView = document.getElementById('quiz-view'), performanceSummaryView = document.getElementById('performance-summary-view'), topicInput = document.getElementById('topic-input'), levelSelect = document.getElementById('level-select'), customLevelContainer = document.getElementById('custom-level-container'), customLevelInput = document.getElementById('custom-level-input'), startQuizBtn = document.getElementById('start-quiz-btn'), quizTopicTitle = document.getElementById('quiz-topic-title'), quizTopicDetails = document.getElementById('quiz-topic-details'), scoreEl = document.getElementById('score'), loader = document.getElementById('loader'), quizContent = document.getElementById('quiz-content'), questionEl = document.getElementById('question'), optionsEl = document.getElementById('options'), nextQuestionBtn = document.getElementById('next-question-btn'), errorBox = document.getElementById('error-box'), errorMessage = document.getElementById('error-message'), homeBtn = document.getElementById('home-btn'), languageSelect = document.getElementById('language-select'), menuBtn = document.getElementById('menu-btn'), menuPanel = document.getElementById('menu-panel'), selectedCountryText = document.getElementById('selected-country-text'), changeCountryBtn = document.getElementById('change-country-btn'), nightModeToggle = document.getElementById('night-mode-toggle'), readAloudToggle = document.getElementById('read-aloud-toggle'), readOptionsToggle = document.getElementById('read-options-toggle'), feedbackToggle = document.getElementById('feedback-toggle'), timerBarContainer = document.getElementById('timer-bar-container'), timerBar = document.getElementById('timer-bar'), playAgainBtn = document.getElementById('play-again-btn'), countryModal = document.getElementById('country-modal'), closeModalBtn = document.getElementById('close-modal-btn'), countrySearchInput = document.getElementById('country-search-input'), countryModalList = document.getElementById('country-modal-list'), normalModeBtn = document.getElementById('normal-mode-btn'), challengeModeBtn = document.getElementById('challenge-mode-btn'), switchBg = document.getElementById('switch-bg'), challengeOptions = document.getElementById('challenge-options'), challengeCountSelect = document.getElementById('challenge-count-select');
-        
+        const topicSelectionView = document.getElementById('topic-selection-view'), quizView = document.getElementById('quiz-view'), performanceSummaryView = document.getElementById('performance-summary-view'), topicInput = document.getElementById('topic-input'), levelSelect = document.getElementById('level-select'), customLevelContainer = document.getElementById('custom-level-container'), customLevelInput = document.getElementById('custom-level-input'), startQuizBtn = document.getElementById('start-quiz-btn'), quizTopicTitle = document.getElementById('quiz-topic-title'), quizTopicDetails = document.getElementById('quiz-topic-details'), scoreEl = document.getElementById('score'), loader = document.getElementById('loader'), quizContent = document.getElementById('quiz-content'), questionEl = document.getElementById('question'), optionsEl = document.getElementById('options'), nextQuestionBtn = document.getElementById('next-question-btn'), errorBox = document.getElementById('error-box'), errorMessage = document.getElementById('error-message'), homeBtn = document.getElementById('home-btn'), languageSelect = document.getElementById('language-select'), menuBtn = document.getElementById('menu-btn'), menuPanel = document.getElementById('menu-panel'), selectedCountryText = document.getElementById('selected-country-text'), changeCountryBtn = document.getElementById('change-country-btn'), nightModeToggle = document.getElementById('night-mode-toggle'), readAloudToggle = document.getElementById('read-aloud-toggle'), readOptionsToggle = document.getElementById('read-options-toggle'), feedbackToggle = document.getElementById('feedback-toggle'), timerBarContainer = document.getElementById('timer-bar-container'), timerBar = document.getElementById('timer-bar'), playAgainBtn = document.getElementById('play-again-btn'), countryModal = document.getElementById('country-modal'), closeModalBtn = document.getElementById('close-modal-btn'), countrySearchInput = document.getElementById('country-search-input'), countryModalList = document.getElementById('country-modal-list'), normalModeBtn = document.getElementById('normal-mode-btn'), challengeModeBtn = document.getElementById('challenge-mode-btn'), switchBg = document.getElementById('switch-bg'), challengeOptions = document.getElementById('challenge-options'), challengeCountSelect = document.getElementById('challenge-count-select'), lockIcon = document.getElementById('lock-icon'), challengeModeText = document.getElementById('challenge-mode-text');
+
         // Application State
+        let isChallengeModeUnlocked = false;
         let currentTopic = '', currentLevel = '', currentLanguage = 'English', currentCountry = 'USA', score = 0, correctAnswer = '', isAnswerSubmitted = false, askedQuestions = [], isReadingOptions = false, prefetchedQuestions = [], isPrefetching = false, debounceTimer;
         let isChallengeMode = false, challengeQuestionCount = 0, totalChallengeQuestions = 10, timerInterval, timeLeft;
         const TIME_PER_QUESTION = 20;
 
-        // Data & Translations
+        // Data, Translations and other functions (অপরিবর্তিত)
         const countryLanguageMap = { "Afghanistan": { primary: "Pashto", relevant: ["Pashto", "Dari", "English"] }, "Argentina": { primary: "Spanish", relevant: ["Spanish", "English"] }, "Australia": { primary: "English", relevant: ["English"] }, "Bangladesh": { primary: "Bengali", relevant: ["Bengali", "English"] }, "Brazil": { primary: "Portuguese", relevant: ["Portuguese", "English", "Spanish"] }, "Canada": { primary: "English", relevant: ["English", "French"] }, "China": { primary: "Mandarin", relevant: ["Mandarin", "English"] }, "Egypt": { primary: "Arabic", relevant: ["Arabic", "English"] }, "France": { primary: "French", relevant: ["French", "English"] }, "Germany": { primary: "German", relevant: ["German", "English"] }, "India": { primary: "Hindi", relevant: ["Hindi", "English", "Bengali"] }, "Indonesia": { primary: "Indonesian", relevant: ["Indonesian", "English"] }, "Italy": { primary: "Italian", relevant: ["Italian", "English"] }, "Japan": { primary: "Japanese", relevant: ["Japanese", "English"] }, "Mexico": { primary: "Spanish", relevant: ["Spanish", "English"] }, "Nigeria": { primary: "English", relevant: ["English", "Hausa", "Yoruba", "Igbo"] }, "Pakistan": { primary: "Urdu", relevant: ["Urdu", "English"] }, "Russia": { primary: "Russian", relevant: ["Russian", "English"] }, "Saudi Arabia": { primary: "Arabic", relevant: ["Arabic", "English"] }, "South Korea": { primary: "Korean", relevant: ["Korean", "English"] }, "Spain": { primary: "Spanish", relevant: ["Spanish", "English", "Catalan"] }, "Turkey": { primary: "Turkish", relevant: ["Turkish", "English"] }, "United Kingdom": { primary: "English", relevant: ["English"] }, "USA": { primary: "English", relevant: ["English", "Spanish"] } };
         const translations = { 'Bengali': { title: 'কুইজ AI', subtitle: 'আপনার পছন্দের যেকোনো বিষয় ও ধরণ বাছাই করে কুইজ শুরু করুন!', langLabel: 'ভাষা', countryLabel: 'দেশ', changeBtn: 'পরিবর্তন', modalTitle: 'দেশ বাছাই করুন', searchPlaceholder: 'দেশ খুঁজুন...', nightModeLabel: 'নাইট মোড', soundLabel: 'সাউন্ড', readAloudLabel: 'প্রশ্ন পড়ুন', readOptionsLabel: 'অপশন পড়ুন', feedbackLabel: 'উত্তর ফিডব্যাক', correctResponse: 'সঠিক!', incorrectResponse: 'ভুল। সঠিক উত্তর হলো', challengeCountLabel: 'প্রশ্নের সংখ্যা', topicLabel: 'বিষয় লিখুন (খালি রাখলে সাধারণ জ্ঞান)', topicPlaceholder: 'যেমন: বাংলাদেশ, ক্রিকেট...', levelLabel: 'প্রশ্নের ধরণ', levels: { easy: 'সহজ', medium: 'মধ্যম', hard: 'কঠিন', bcs: 'বিসিএস প্রস্তুতি', custom: 'অন্যান্য' }, customLevelLabel: 'আপনার পছন্দের ধরণ', customLevelPlaceholder: 'যেমন: ব্যাংক জব...', startQuiz: 'কুইজ শুরু করুন', home: 'হোম', score: 'স্কোর', nextQuestion: 'পরবর্তী প্রশ্ন', errorTitle: 'ত্রুটি!', errorTopic: 'অনুগ্রহ করে একটি বিষয় লিখুন।', errorCustomLevel: 'অনুগ্রহ করে আপনার পছন্দের ধরণ লিখুন।', errorFetch: 'প্রশ্ন আনতে সমস্যা হচ্ছে।', errorUnexpected: 'AI থেকে একটি অপ্রত্যাশিত উত্তর এসেছে।', errorFormat: 'AI একটি ভুল ফরম্যাটে ডেটা পাঠিয়েছে।', errorInvalidData: 'AI থেকে পাওয়া ডেটা সঠিক ফরম্যাটে নেই।', errorServer: 'সার্ভার থেকে উত্তর পেতে সমস্যা হচ্ছে।', errorAllKeysFailed: 'এই মুহূর্তে প্রশ্ন তৈরি করা সম্ভব হচ্ছে না। অনুগ্রহ করে পৃষ্ঠাটি রিফ্রেশ করে আবার চেষ্টা করুন।', summaryTitle: 'চ্যালেঞ্জ সম্পন্ন!', summaryTotal: 'মোট প্রশ্ন', summaryCorrect: 'সঠিক উত্তর', summaryIncorrect: 'ভুল উত্তর', summaryPercentage: 'পার্সেন্টেজ', summaryRating: 'রেটিং', ratings: { good: 'ভালো', better: 'আরও ভালো', best: 'সেরা' }, playAgain: 'আবার খেলুন', randomTopicDefault: 'সাধারণ জ্ঞান', modeLabel: 'মোড বাছাই করুন', normalMode: 'সাধারণ', challengeMode: 'চ্যালেঞ্জ' }, 'English': { title: 'Quiz AI', subtitle: 'Start a quiz by choosing any topic and difficulty!', langLabel: 'Language', countryLabel: 'Country', changeBtn: 'Change', modalTitle: 'Select a Country', searchPlaceholder: 'Search for a country...', nightModeLabel: 'Night Mode', soundLabel: 'Sound', readAloudLabel: 'Read Question', readOptionsLabel: 'Read Options', feedbackLabel: 'Answer Feedback', correctResponse: 'Correct!', incorrectResponse: 'Incorrect. The correct answer is', challengeCountLabel: 'Number of Questions', topicLabel: 'Enter a topic (leave blank for random)', topicPlaceholder: 'e.g., History, Science...', levelLabel: 'Select difficulty', levels: { easy: 'Easy', medium: 'Intermediate', hard: 'Hard', bcs: 'Job Prep', custom: 'Custom' }, customLevelLabel: 'Enter custom level', customLevelPlaceholder: 'e.g., Medical Entrance...', startQuiz: 'Start Quiz', home: 'Home', score: 'Score', nextQuestion: 'Next Question', errorTitle: 'Error!', errorTopic: 'Please enter a topic.', errorCustomLevel: 'Please enter a custom level.', errorFetch: 'Failed to fetch question.', errorUnexpected: 'Received an unexpected response from the AI.', errorFormat: 'The AI sent data in a wrong format.', errorInvalidData: 'The data from the AI is not in the correct format.', errorServer: 'Could not get a response from the server.', errorAllKeysFailed: 'Could not generate a question at this moment. Please refresh the page and try again.', summaryTitle: 'Challenge Complete!', summaryTotal: 'Total Questions', summaryCorrect: 'Correct Answers', summaryIncorrect: 'Incorrect Answers', summaryPercentage: 'Percentage', summaryRating: 'Rating', ratings: { good: 'Good', better: 'Better', best: 'Best' }, playAgain: 'Play Again', randomTopicDefault: 'General Knowledge', modeLabel: 'Select Mode', normalMode: 'Normal', challengeMode: 'Challenge' } };
-
-        // --- Core Application Functions ---
         async function generateQuestionViaApi(prompt) { const apiUrl = '/api/generateQuiz'; const payload = { prompt }; try { const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); if (!response.ok) { const errorData = await response.json(); throw new Error(errorData.message || 'Server error'); } return await response.json(); } catch (error) { console.error("API call failed:", error); throw error; } }
         async function fetchNewQuestion() { if (isChallengeMode && challengeQuestionCount >= totalChallengeQuestions) { showPerformanceSummary(); return; } if (prefetchedQuestions.length > 0) { const dataToShow = prefetchedQuestions.shift(); displayQuestion(dataToShow); return; } showLoader(true); isAnswerSubmitted = false; nextQuestionBtn.classList.add('hidden'); optionsEl.innerHTML = ''; questionEl.textContent = ''; const t = translations[currentLanguage] || translations['English']; const historyPrompt = `Please generate a new and different question that is not similar to these previous questions: ["${askedQuestions.slice(-10).join('", "')}"].`; let prompt = `Generate a multiple-choice quiz question about "${currentTopic}" at the "${currentLevel}" level, in ${currentLanguage}.`; if (currentTopic !== t.randomTopicDefault) { prompt += ` The question should be relevant to ${currentCountry}.`; } prompt += ` ${historyPrompt} Provide a clean JSON response with keys "question", "options" (an array of 4), and "correct_answer".`; try { const quizObject = await generateQuestionViaApi(prompt); if (!quizObject?.question || !quizObject.options?.length || !quizObject.correct_answer) { throw new Error(t.errorInvalidData); } displayQuestion(quizObject); hideError(); } catch (error) { console.error('Error fetching quiz question:', error); const t = translations[currentLanguage] || translations['English']; let displayMessage = `${t.errorFetch} ${error.message}`; if (error.message && error.message.includes('All available API keys failed')) { displayMessage = t.errorAllKeysFailed; } showError(displayMessage); } finally { showLoader(false); } }
-        function updateLanguageUI(langKey) { const lang = translations[langKey] ? langKey : 'English'; const t = translations[lang]; document.documentElement.lang = { 'Bengali': 'bn', 'English': 'en' }[lang] || 'en'; document.getElementById('main-title').textContent = t.title; document.getElementById('subtitle').textContent = t.subtitle; document.getElementById('lang-label').textContent = t.langLabel; document.getElementById('country-label').textContent = t.countryLabel; document.getElementById('topic-label').textContent = t.topicLabel; topicInput.placeholder = t.topicPlaceholder; document.getElementById('level-label').textContent = t.levelLabel; document.getElementById('custom-level-label').textContent = t.customLevelLabel; customLevelInput.placeholder = t.customLevelPlaceholder; startQuizBtn.textContent = t.startQuiz; document.getElementById('challenge-count-label').textContent = t.challengeCountLabel; document.getElementById('score-label').textContent = t.score; nextQuestionBtn.textContent = t.nextQuestion; document.getElementById('error-title').textContent = t.errorTitle; changeCountryBtn.textContent = t.changeBtn; document.getElementById('modal-title').textContent = t.modalTitle; countrySearchInput.placeholder = t.searchPlaceholder; document.getElementById('night-mode-label').textContent = t.nightModeLabel; document.getElementById('sound-label').textContent = t.soundLabel; document.getElementById('read-aloud-label').textContent = t.readAloudLabel; document.getElementById('read-options-label').textContent = t.readOptionsLabel; document.getElementById('feedback-label').textContent = t.feedbackLabel; document.getElementById('summary-title').textContent = t.summaryTitle; document.getElementById('summary-total-label').textContent = t.summaryTotal; document.getElementById('summary-correct-label').textContent = t.summaryCorrect; document.getElementById('summary-incorrect-label').textContent = t.summaryIncorrect; document.getElementById('summary-percentage-label').textContent = t.summaryPercentage; playAgainBtn.textContent = t.playAgain; document.getElementById('mode-label').textContent = t.modeLabel; normalModeBtn.textContent = t.normalMode; challengeModeBtn.textContent = t.challengeMode; levelSelect.innerHTML = `<option value="${t.levels.easy}">${t.levels.easy}</option><option value="${t.levels.medium}">${t.levels.medium}</option><option value="${t.levels.hard}">${t.levels.hard}</option><option value="${t.levels.bcs}">${t.levels.bcs}</option><option value="custom">${t.levels.custom}</option>`; }
+        function updateLanguageUI(langKey) { const lang = translations[langKey] ? langKey : 'English'; const t = translations[lang]; document.documentElement.lang = { 'Bengali': 'bn', 'English': 'en' }[lang] || 'en'; document.getElementById('main-title').textContent = t.title; document.getElementById('subtitle').textContent = t.subtitle; document.getElementById('lang-label').textContent = t.langLabel; document.getElementById('country-label').textContent = t.countryLabel; document.getElementById('topic-label').textContent = t.topicLabel; topicInput.placeholder = t.topicPlaceholder; document.getElementById('level-label').textContent = t.levelLabel; document.getElementById('custom-level-label').textContent = t.customLevelLabel; customLevelInput.placeholder = t.customLevelPlaceholder; startQuizBtn.textContent = t.startQuiz; document.getElementById('challenge-count-label').textContent = t.challengeCountLabel; document.getElementById('score-label').textContent = t.score; nextQuestionBtn.textContent = t.nextQuestion; document.getElementById('error-title').textContent = t.errorTitle; changeCountryBtn.textContent = t.changeBtn; document.getElementById('modal-title').textContent = t.modalTitle; countrySearchInput.placeholder = t.searchPlaceholder; document.getElementById('night-mode-label').textContent = t.nightModeLabel; document.getElementById('sound-label').textContent = t.soundLabel; document.getElementById('read-aloud-label').textContent = t.readAloudLabel; document.getElementById('read-options-label').textContent = t.readOptionsLabel; document.getElementById('feedback-label').textContent = t.feedbackLabel; document.getElementById('summary-title').textContent = t.summaryTitle; document.getElementById('summary-total-label').textContent = t.summaryTotal; document.getElementById('summary-correct-label').textContent = t.summaryCorrect; document.getElementById('summary-incorrect-label').textContent = t.summaryIncorrect; document.getElementById('summary-percentage-label').textContent = t.summaryPercentage; playAgainBtn.textContent = t.playAgain; document.getElementById('mode-label').textContent = t.modeLabel; normalModeBtn.textContent = t.normalMode; challengeModeText.textContent = t.challengeMode; levelSelect.innerHTML = `<option value="${t.levels.easy}">${t.levels.easy}</option><option value="${t.levels.medium}">${t.levels.medium}</option><option value="${t.levels.hard}">${t.levels.hard}</option><option value="${t.levels.bcs}">${t.levels.bcs}</option><option value="custom">${t.levels.custom}</option>`; }
         function populateCountries() { countryModalList.innerHTML = ''; const countries = Object.keys(countryLanguageMap).sort(); countries.forEach(country => { const item = document.createElement('div'); item.className = 'p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer country-item'; item.textContent = country; item.dataset.country = country; item.addEventListener('click', () => selectCountry(country)); countryModalList.appendChild(item); }); }
         function selectCountry(country) { currentCountry = country; selectedCountryText.textContent = country; updateLanguageOptions(country); countryModal.classList.add('hidden'); localStorage.setItem('quizAppCountry', country); if (topicSelectionView.classList.contains('hidden') && quizView.classList.contains('hidden')) { topicSelectionView.classList.remove('hidden'); } }
         function updateLanguageOptions(country) { const data = countryLanguageMap[country]; if (!data) return; languageSelect.innerHTML = ''; data.relevant.forEach(lang => { const option = document.createElement('option'); option.value = lang; option.textContent = lang; languageSelect.appendChild(option); }); languageSelect.value = data.primary; currentLanguage = data.primary; updateLanguageUI(currentLanguage); }
         function setTheme(theme) { localStorage.setItem('theme', theme); if (theme === 'dark') { document.documentElement.classList.add('dark'); nightModeToggle.classList.add('toggle-on'); } else { document.documentElement.classList.remove('dark'); nightModeToggle.classList.remove('toggle-on'); } }
         function setSoundToggleState(toggleElement, key, isEnabled) { localStorage.setItem(key, isEnabled); if (isEnabled) { toggleElement.classList.add('toggle-on'); } else { toggleElement.classList.remove('toggle-on'); } }
         function startQuiz() { currentTopic = topicInput.value.trim(); const t = translations[currentLanguage] || translations['English']; if (!currentTopic) { currentTopic = t.randomTopicDefault; } const isCustom = levelSelect.value === 'custom' || levelSelect.options[levelSelect.selectedIndex].text === t.levels.custom; if (isCustom) { currentLevel = customLevelInput.value.trim(); if (!currentLevel) { showError(t.errorCustomLevel); return; } } else { currentLevel = levelSelect.value; } hideError(); topicSelectionView.classList.add('hidden'); quizView.classList.remove('hidden'); score = 0; askedQuestions = []; if (isChallengeMode) { totalChallengeQuestions = parseInt(challengeCountSelect.value, 10); challengeQuestionCount = 0; timerBarContainer.classList.remove('hidden'); } else { timerBarContainer.classList.add('hidden'); } updateScore(); fetchNewQuestion(); }
-        function goToHome() { isReadingOptions = false; speechSynthesis.cancel(); quizView.classList.add('hidden'); performanceSummaryView.classList.add('hidden'); topicSelectionView.classList.remove('hidden'); topicInput.value = ''; customLevelInput.value = ''; levelSelect.selectedIndex = 0; customLevelContainer.classList.add('hidden'); hideError(); }
+        
+        // goToHome ফাংশন পরিবর্তিত হয়েছে
+        function goToHome() {
+            isChallengeModeUnlocked = false;
+            isChallengeMode = false;
+            isReadingOptions = false; 
+            speechSynthesis.cancel(); 
+            quizView.classList.add('hidden'); 
+            performanceSummaryView.classList.add('hidden'); 
+            topicSelectionView.classList.remove('hidden'); 
+            topicInput.value = ''; 
+            customLevelInput.value = ''; 
+            levelSelect.selectedIndex = 0; 
+            customLevelContainer.classList.add('hidden'); 
+            hideError();
+            updateSwitchUI();
+        }
+
         function startTimer() { clearInterval(timerInterval); timeLeft = TIME_PER_QUESTION * 1000; const totalTime = timeLeft; const updateInterval = 50; timerBar.style.transition = 'none'; timerBar.style.width = '100%'; timerBar.style.backgroundColor = '#4f46e5'; const startColor = { r: 79, g: 70, b: 229 }, endColor = { r: 239, g: 68, b: 68 }; timerInterval = setInterval(() => { timeLeft -= updateInterval; if (timeLeft <= 0) { clearInterval(timerInterval); timerBar.style.width = '0%'; checkAnswer(); return; } const progress = 1 - (timeLeft / totalTime); const widthPercentage = (timeLeft / totalTime) * 100; const r = Math.round(startColor.r + (endColor.r - startColor.r) * progress); const g = Math.round(startColor.g + (endColor.g - startColor.g) * progress); const b = Math.round(startColor.b + (endColor.b - startColor.b) * progress); timerBar.style.width = `${widthPercentage}%`; timerBar.style.backgroundColor = `rgb(${r}, ${g}, ${b})`; }, updateInterval); }
         async function prefetchSingleQuestion() { if (isChallengeMode && (askedQuestions.length + prefetchedQuestions.length >= totalChallengeQuestions)) { return false; } const t = translations[currentLanguage] || translations['English']; const allKnownQuestions = [...askedQuestions, ...prefetchedQuestions.map(q => q.question)]; const historyPrompt = `Please generate a new and different question that is not similar to these previous questions: ["${allKnownQuestions.slice(-10).join('", "')}"].`; const topicForPrompt = topicInput.value.trim() || t.randomTopicDefault; const levelForPrompt = levelSelect.value === 'custom' ? customLevelInput.value.trim() : levelSelect.value; let prompt = `Generate a multiple-choice quiz question about "${topicForPrompt}" at the "${levelForPrompt}" level, in ${currentLanguage}.`; if (topicForPrompt !== t.randomTopicDefault) { prompt += ` The question should be relevant to ${currentCountry}.`; } prompt += ` ${historyPrompt} Provide a clean JSON response with keys "question", "options" (an array of 4), and "correct_answer".`; try { const quizObject = await generateQuestionViaApi(prompt); if (quizObject?.question && quizObject.options?.length && quizObject.correct_answer) { prefetchedQuestions.push(quizObject); return true; } return false; } catch (error) { console.error("Prefetch failed:", error); return false; } }
         async function managePrefetching() { if (isPrefetching) return; isPrefetching = true; while (prefetchedQuestions.length < 3) { const success = await prefetchSingleQuestion(); if (!success) break; } isPrefetching = false; }
@@ -213,10 +248,40 @@
         function showLoader(isLoading) { loader.classList.toggle('hidden', !isLoading); quizContent.classList.toggle('hidden', isLoading); }
         function showError(message) { errorMessage.textContent = message; errorBox.classList.remove('hidden'); }
         function hideError() { errorBox.classList.add('hidden'); }
-        function updateSwitchUI() { if (isChallengeMode) { switchBg.style.transform = 'translateX(100%)'; challengeOptions.classList.remove('hidden'); normalModeBtn.classList.remove('text-indigo-600', 'dark:text-white'); challengeModeBtn.classList.add('text-indigo-600', 'dark:text-white'); } else { switchBg.style.transform = 'translateX(0%)'; challengeOptions.classList.add('hidden'); challengeModeBtn.classList.remove('text-indigo-600', 'dark:text-white'); normalModeBtn.classList.add('text-indigo-600', 'dark:text-white'); } }
+        
+        // updateSwitchUI ফাংশন পরিবর্তিত হয়েছে
+        function updateSwitchUI() {
+            if (isChallengeModeUnlocked) {
+                challengeModeBtn.classList.remove('locked');
+                lockIcon.classList.add('hidden');
+            } else {
+                challengeModeBtn.classList.add('locked');
+                lockIcon.classList.remove('hidden');
+            }
+
+            if (isChallengeMode) { 
+                switchBg.style.transform = 'translateX(100%)'; 
+                challengeOptions.classList.remove('hidden'); 
+                normalModeBtn.classList.remove('text-indigo-600', 'dark:text-white'); 
+                challengeModeBtn.classList.add('text-indigo-600', 'dark:text-white'); 
+            } else { 
+                switchBg.style.transform = 'translateX(0%)'; 
+                challengeOptions.classList.add('hidden'); 
+                challengeModeBtn.classList.remove('text-indigo-600', 'dark:text-white'); 
+                normalModeBtn.classList.add('text-indigo-600', 'dark:text-white'); 
+            } 
+        }
+        
         function clearPrefetchAndRestart() { clearTimeout(debounceTimer); prefetchedQuestions = []; const topic = topicInput.value.trim(); if (topic.length > 2 || topic.length === 0) { managePrefetching(); } }
         
-        // --- Event Listeners (এই অংশটি সহজ করা হয়েছে) ---
+        // নতুন ফাংশন
+        function unlockChallengeModeForOneSession() {
+            isChallengeModeUnlocked = true;
+            isChallengeMode = true;
+            updateSwitchUI();
+        }
+
+        // --- Event Listeners --- (পরিবর্তিত)
         menuBtn.addEventListener('click', () => menuPanel.classList.toggle('hidden')); 
         document.addEventListener('click', (e) => { if (!menuBtn.contains(e.target) && !menuPanel.contains(e.target)) { menuPanel.classList.add('hidden'); } }); 
         changeCountryBtn.addEventListener('click', () => { countryModal.classList.remove('hidden'); menuPanel.classList.add('hidden'); }); 
@@ -225,13 +290,12 @@
         countrySearchInput.addEventListener('input', (e) => { const searchTerm = e.target.value.toLowerCase(); const countryItems = countryModalList.querySelectorAll('.country-item'); countryItems.forEach(item => { const countryName = item.textContent.toLowerCase(); item.style.display = countryName.includes(searchTerm) ? 'block' : 'none'; }); }); 
         languageSelect.addEventListener('change', (e) => { currentLanguage = e.target.value; updateLanguageUI(currentLanguage); clearPrefetchAndRestart(); }); 
         levelSelect.addEventListener('change', () => { const t = translations[currentLanguage] || translations['English']; const isCustom = levelSelect.value === 'custom' || levelSelect.options[levelSelect.selectedIndex].text === t.levels.custom; customLevelContainer.classList.toggle('hidden', !isCustom); clearPrefetchAndRestart(); }); 
-        
-        // বাটনগুলোর সাধারণ কাজ
-        nightModeToggle.addEventListener('click', () => { const isDarkMode = document.documentElement.classList.contains('dark'); setTheme(isDarkMode ? 'light' : 'dark'); }); 
-        readAloudToggle.addEventListener('click', () => { const isEnabled = !readAloudToggle.classList.contains('toggle-on'); setSoundToggleState(readAloudToggle, 'readAloudEnabled', isEnabled); }); 
-        readOptionsToggle.addEventListener('click', () => { const isEnabled = !readOptionsToggle.classList.contains('toggle-on'); setSoundToggleState(readOptionsToggle, 'readOptionsEnabled', isEnabled); }); 
-        feedbackToggle.addEventListener('click', () => { const isEnabled = !feedbackToggle.classList.contains('toggle-on'); setSoundToggleState(feedbackToggle, 'feedbackEnabled', isEnabled); }); 
-        
+
+        nightModeToggle.addEventListener('click', (event) => { if (nightModeToggle.classList.contains('toggle-on')) { event.preventDefault(); event.stopPropagation(); } const isDarkMode = document.documentElement.classList.contains('dark'); setTheme(isDarkMode ? 'light' : 'dark'); }); 
+        readAloudToggle.addEventListener('click', (event) => { if (readAloudToggle.classList.contains('toggle-on')) { event.preventDefault(); event.stopPropagation(); } const isEnabled = !readAloudToggle.classList.contains('toggle-on'); setSoundToggleState(readAloudToggle, 'readAloudEnabled', isEnabled); }); 
+        readOptionsToggle.addEventListener('click', (event) => { if (readOptionsToggle.classList.contains('toggle-on')) { event.preventDefault(); event.stopPropagation(); } const isEnabled = !readOptionsToggle.classList.contains('toggle-on'); setSoundToggleState(readOptionsToggle, 'readOptionsEnabled', isEnabled); }); 
+        feedbackToggle.addEventListener('click', (event) => { if (feedbackToggle.classList.contains('toggle-on')) { event.preventDefault(); event.stopPropagation(); } const isEnabled = !feedbackToggle.classList.contains('toggle-on'); setSoundToggleState(feedbackToggle, 'feedbackEnabled', isEnabled); }); 
+
         startQuizBtn.addEventListener('click', () => startQuiz()); 
         playAgainBtn.addEventListener('click', goToHome); 
         nextQuestionBtn.addEventListener('click', fetchNewQuestion); 
@@ -239,9 +303,19 @@
         topicInput.addEventListener('input', () => { clearTimeout(debounceTimer); prefetchedQuestions = []; const topic = topicInput.value.trim(); if (topic.length > 2) { debounceTimer = setTimeout(() => { managePrefetching(); }, 700); } });
         customLevelInput.addEventListener('input', clearPrefetchAndRestart);
 
-        normalModeBtn.addEventListener('click', () => { isChallengeMode = false; updateSwitchUI(); }); 
-        challengeModeBtn.addEventListener('click', () => { isChallengeMode = true; updateSwitchUI(); });
+        normalModeBtn.addEventListener('click', () => { 
+            isChallengeMode = false; 
+            updateSwitchUI(); 
+        }); 
+        
+        challengeModeBtn.addEventListener('click', () => { 
+            if (isChallengeModeUnlocked) {
+                isChallengeMode = true; 
+                updateSwitchUI(); 
+            }
+        });
 
+        // initializeApp ফাংশন পরিবর্তিত হয়েছে
         function initializeApp() { 
             populateCountries(); 
             const savedTheme = localStorage.getItem('theme'); 
@@ -258,6 +332,7 @@
                 updateLanguageUI('English'); 
             } 
             isChallengeMode = false;
+            isChallengeModeUnlocked = false;
             updateSwitchUI(); 
         }
 
