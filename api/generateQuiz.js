@@ -1,6 +1,5 @@
 // File path: /api/generateQuiz.js
-// This Vercel Serverless Function securely handles API calls with a fallback mechanism
-// and is protected by a secret key to only allow access from the designated Android app.
+// This Vercel Serverless Function now allows access from any client by removing the security check.
 
 // Read up to 20 API keys from Vercel Environment Variables.
 const GEMINI_API_KEYS = [
@@ -74,16 +73,10 @@ async function callGeminiWithFallback(prompt) {
 // --- Main Vercel Handler Function ---
 export default async function handler(req, res) {
   
-  // --- START: Security Check using Secret Key ---
-  // This is the most important part for protecting your API
-  const expectedSecretKey = process.env.ANDROID_APP_SECRET_KEY;
-  const receivedSecretKey = req.headers['x-app-secret-key'];
-
-  // If the secret key on the server is not set, or the key from the app does not match, block access.
-  if (!expectedSecretKey || receivedSecretKey !== expectedSecretKey) {
-    return res.status(403).json({ message: 'Forbidden: Unauthorized Access.' });
-  }
-  // --- END: Security Check ---
+  // --- START: Removed Security Check ---
+  // The security check has been removed as per the user's request.
+  // This API is now accessible to anyone with the endpoint.
+  // --- END: Removed Security Check ---
 
   // Only allow POST requests
   if (req.method !== 'POST') {
@@ -102,7 +95,7 @@ export default async function handler(req, res) {
     res.status(200).json(quizObject);
 
   } catch (error) {
-    console.error('Final error after trying all keys:', error);
-    res.status(500).json({ message: error.message });
+      console.error('Final error after trying all keys:', error);
+      res.status(500).json({ message: error.message });
   }
 }
